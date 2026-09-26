@@ -1,0 +1,6 @@
+{
+  "name": "NS Properties",
+  "description": "Comprehensive Indian property search, buying, renting, and listing portal by NS Properties with verified homes, EMI calculator, project insights, and comparison.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

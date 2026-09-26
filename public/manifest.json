@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "NS Properties | Luxury Real Estate",
+  "short_name": "NSProperties",
+  "description": "Comprehensive Indian property search, buying, renting, and listing portal with verified homes, EMI calculator, and site visit scheduling.",
+  "theme_color": "#1a1a1a",
+  "background_color": "#fdfcf9",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "start_url": "/",
+  "scope": "/",
+  "categories": ["business", "lifestyle", "productivity"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

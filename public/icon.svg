@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="nsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#005CA8"/>
+      <stop offset="100%" stop-color="#003B73"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="110" fill="url(#nsGrad)"/>
+  <!-- Modern Building Skyline Silhouette -->
+  <path d="M120 370 V240 L190 190 V370 Z" fill="#ffffff" opacity="0.2"/>
+  <path d="M190 370 V150 L270 110 V370 Z" fill="#ffffff" opacity="0.3"/>
+  <path d="M270 370 V180 L350 140 V370 Z" fill="#ffffff" opacity="0.2"/>
+  <!-- NS Monogram & House Roof Shape -->
+  <path d="M140 250 L256 160 L372 250" stroke="url(#goldGrad)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="256" cy="130" r="16" fill="url(#goldGrad)"/>
+  
+  <!-- Text NS -->
+  <text x="256" y="340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="120" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">NS</text>
+  <text x="256" y="405" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="700" fill="#FDE68A" text-anchor="middle" letter-spacing="8">PROPERTIES</text>
+</svg>
