@@ -173,8 +173,9 @@ export const SavedDrawer: React.FC<SavedDrawerProps> = ({
 
                   <div>
                     <h5 className="font-serif-luxury text-sm font-bold text-[#1a1a1a]">{v.propertyTitle}</h5>
-                    <p className="font-mono-luxury text-xs text-[#c4a47c] font-semibold mt-1">
-                      📅 {v.date} ({v.timeSlot})
+                    <p className="font-mono-luxury text-xs text-[#c4a47c] font-semibold mt-1 flex items-center gap-1.5">
+                      <CalendarCheck className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>{v.date} ({v.timeSlot})</span>
                     </p>
                     <p className="editorial-label text-[#1a1a1a]/60 text-[10px] normal-case mt-0.5">
                       Visitor: {v.name} ({v.phone})

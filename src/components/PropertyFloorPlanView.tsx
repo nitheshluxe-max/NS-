@@ -332,7 +332,7 @@ export const PropertyFloorPlanView: React.FC<PropertyFloorPlanViewProps> = ({
                   >
                     <div className="flex items-center justify-between text-xs text-cyan-200 font-black">
                       <span>EXPANSIVE LIVING & DINING GREAT ROOM</span>
-                      <span className="text-emerald-400 text-[10px]">MAIN ENTRANCE ➔</span>
+                      <span className="text-emerald-400 text-[10px]">MAIN ENTRANCE -&gt;</span>
                     </div>
                     <p className="text-[11px] text-cyan-300 mt-1">22' 6" × 14' 0" • 315 SQ.FT</p>
                     <div className="mt-2 text-[10px] text-white/70 flex items-center gap-3">
@@ -406,9 +406,9 @@ export const PropertyFloorPlanView: React.FC<PropertyFloorPlanViewProps> = ({
                 </div>
 
                 <div className="p-3 border border-dashed border-emerald-400/60 bg-emerald-950/30 flex items-center justify-between text-[11px]">
-                  <span>🌳 70% Open Green Spaces & Central Park</span>
-                  <span>🎾 Tennis & Badminton Courts</span>
-                  <span>🚗 2-Level Basement Parking</span>
+                  <span>70% Open Green Spaces & Central Park</span>
+                  <span>Tennis & Badminton Courts</span>
+                  <span>2-Level Basement Parking</span>
                 </div>
 
                 <div className="mt-3 text-center text-[10px] text-emerald-300/70">

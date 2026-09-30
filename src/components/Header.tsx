@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Building2, 
   Heart, 
@@ -7,30 +7,37 @@ import {
   TrendingUp, 
   PlusCircle, 
   MapPin, 
-  ChevronDown,
-  CalendarCheck,
-  Download,
-  Share2,
-  MessageSquare,
-  Users,
-  Sparkles,
-  Lock,
-  Settings,
-  Crown,
-  Terminal,
-  ShieldAlert,
-  User,
-  LogOut,
-  Phone,
-  Briefcase,
-  TreePine,
-  Layers,
-  Headphones,
-  Star,
-  Clock,
-  KeyRound,
-  Bell,
-  Tag
+  ChevronDown, 
+  ChevronRight,
+  CalendarCheck, 
+  Download, 
+  Share2, 
+  MessageSquare, 
+  Users, 
+  Sparkles, 
+  Lock, 
+  Settings, 
+  Crown, 
+  Terminal, 
+  ShieldAlert, 
+  User, 
+  LogOut, 
+  Phone, 
+  Briefcase, 
+  TreePine, 
+  Layers, 
+  Headphones, 
+  Star, 
+  Clock, 
+  KeyRound, 
+  Bell, 
+  Tag,
+  Menu,
+  X,
+  FileText,
+  CheckCircle2,
+  Eye,
+  ArrowRight
 } from 'lucide-react';
 import { TOP_CITIES } from '../data/properties';
 import { openWhatsAppChat, DEFAULT_CONTACT_PHONE, DISPLAY_CONTACT_PHONE } from '../utils/whatsapp';
@@ -57,11 +64,12 @@ interface HeaderProps {
   onOpenOwnerConsole?: () => void;
   onOpenDeveloperConsole?: () => void;
   onOpenStaffConsole?: () => void;
-  onOpenUserHub?: (tab?: 'activity' | 'profile' | 'service' | 'feedback' | 'security' | 'communication', subTab?: 'contacted' | 'shortlisted' | 'viewed') => void;
+  onOpenUserHub?: (tab?: 'activity' | 'profile' | 'service' | 'feedback' | 'security' | 'communication', subTab?: 'contacted' | 'shortlisted' | 'viewed' | 'brochures' | 'offers') => void;
   activeCategory?: string;
   onSelectCategory?: (cat: 'apartments' | 'plots' | 'commercial' | 'projects') => void;
   onOpenPlansModal?: () => void;
   onOpenOffers?: () => void;
+  onOpenSettings?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -89,10 +97,36 @@ export const Header: React.FC<HeaderProps> = ({
   activeCategory = 'apartments',
   onSelectCategory,
   onOpenPlansModal,
-  onOpenOffers
+  onOpenOffers,
+  onOpenSettings
 }) => {
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close user menu on outside click or Escape key
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setUserMenuOpen(false);
+        setCityDropdownOpen(false);
+      }
+    };
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [userMenuOpen]);
 
   const isOwner = activeSession?.role === 'owner';
   const isDeveloper = activeSession?.role === 'developer';
@@ -170,7 +204,7 @@ export const Header: React.FC<HeaderProps> = ({
                 title="Authorized Private Dashboards: Owner, Developer & Staff"
               >
                 <Lock className="w-2.5 h-2.5 text-[#c4a47c]" />
-                <span>Private Dashboards 🔒</span>
+                <span>Private Dashboards</span>
               </button>
             )}
 
@@ -345,11 +379,11 @@ export const Header: React.FC<HeaderProps> = ({
           {onOpenPlansModal && (
             <button
               onClick={onOpenPlansModal}
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-gray-100 border border-[#1a1a1a]/30 transition-all cursor-pointer"
-              title="Agent & Builder Subscription Plans"
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-gray-100 border border-[#1a1a1a]/30 transition-all cursor-pointer font-bold"
+              title="Agent & Builder Plans: Free Site Visits & Deals"
             >
               <Crown className="w-3.5 h-3.5 text-[#c4a47c]" />
-              <span>Plans</span>
+              <span>Free Visit Plans</span>
             </button>
           )}
 
@@ -404,242 +438,617 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {/* ========================================================================= */}
-          {/* USER AUTHENTICATION & PRIVATE DASHBOARDS */}
-          {/* Normal users see Login / Register. Authorized roles see their dashboard. */}
+          {/* USER AUTHENTICATION & COMPREHENSIVE USER MENU */}
+          {/* Provides seamless user navigation for logged-in users and guests. */}
           {/* ========================================================================= */}
-          {activeSession ? (
-            <div className="relative">
-              {/* Authorized Owner Button */}
+          <div className="relative" ref={userMenuRef}>
+            <div className="flex items-center gap-1.5">
+              {/* Direct Console Shortcut for Authorized Roles */}
               {isOwner && onOpenOwnerConsole && (
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={onOpenOwnerConsole}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#c4a47c] border border-[#c4a47c] transition-all cursor-pointer font-bold shadow-xs"
-                    title="Open App Owner Master Control Console"
-                  >
-                    <Crown className="w-3.5 h-3.5 text-[#c4a47c]" />
-                    <span>Owner Dashboard</span>
-                  </button>
-                  <button
-                    onClick={onLogout}
-                    className="p-1.5 text-gray-500 hover:text-red-600 border border-transparent hover:border-gray-300 transition-colors cursor-pointer"
-                    title="Logout Owner Session"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                <button
+                  onClick={onOpenOwnerConsole}
+                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#c4a47c] border border-[#c4a47c] transition-all cursor-pointer font-bold shadow-xs"
+                  title="App Owner Master Console"
+                >
+                  <Crown className="w-3.5 h-3.5 text-[#c4a47c]" />
+                  <span>Owner Console</span>
+                </button>
               )}
 
-              {/* Authorized Developer Button */}
               {isDeveloper && onOpenDeveloperConsole && (
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={onOpenDeveloperConsole}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#020617] hover:bg-[#0a0f1d] text-cyan-300 border border-cyan-500 transition-all cursor-pointer font-bold shadow-xs"
-                    title="Open Developer Technical Dashboard (9 Subsystems)"
-                  >
-                    <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Dev Dashboard</span>
-                  </button>
-                  <button
-                    onClick={onLogout}
-                    className="p-1.5 text-gray-500 hover:text-red-600 border border-transparent hover:border-gray-300 transition-colors cursor-pointer"
-                    title="Logout Developer Session"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                <button
+                  onClick={onOpenDeveloperConsole}
+                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase bg-[#020617] hover:bg-[#0a0f1d] text-cyan-300 border border-cyan-500 transition-all cursor-pointer font-bold shadow-xs"
+                  title="Developer Technical Console"
+                >
+                  <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Dev Tech</span>
+                </button>
               )}
 
-              {/* Authorized Staff Button */}
               {isStaff && onOpenStaffConsole && (
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={onOpenStaffConsole}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-500 transition-all cursor-pointer font-bold shadow-xs"
-                    title="Open Staff & Relationship Manager Dashboard"
-                  >
-                    <Users className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Staff Dashboard</span>
-                  </button>
-                  <button
-                    onClick={onLogout}
-                    className="p-1.5 text-gray-500 hover:text-red-600 border border-transparent hover:border-gray-300 transition-colors cursor-pointer"
-                    title="Logout Staff Session"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                <button
+                  onClick={onOpenStaffConsole}
+                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-500 transition-all cursor-pointer font-bold shadow-xs"
+                  title="Staff CRM Console"
+                >
+                  <Users className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Staff CRM</span>
+                </button>
               )}
 
-              {/* Normal Logged-in Buyer / Seller */}
-              {!isOwner && !isDeveloper && !isStaff && (
+              {/* USER MENU TRIGGER BUTTON */}
+              {activeSession ? (
+                /* Logged In User Button */
+                <button
+                  onClick={() => setUserMenuOpen((prev) => !prev)}
+                  className="flex items-center gap-2 px-3 py-1.5 text-xs font-mono-luxury bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
+                  title="Open User Navigation Menu"
+                  aria-expanded={userMenuOpen}
+                >
+                  <Menu className="w-3.5 h-3.5 text-[#c4a47c]" />
+                  <div className="w-5 h-5 rounded-full bg-[#c4a47c] text-black font-black text-[10px] flex items-center justify-center shrink-0">
+                    {activeSession.name ? activeSession.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span className="hidden sm:inline font-bold">User Menu</span>
+                  <span className="truncate max-w-[90px] text-gray-300">({activeSession.name.split(' ')[0]})</span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-gray-300 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+              ) : (
+                /* Guest / Logged Out User Menu Button */
                 <div className="flex items-center gap-1.5">
-                  {/* Direct 1-Click My Account / Activity Hub button */}
                   <button
-                    onClick={() => onOpenUserHub?.('activity')}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
-                    title="Open My Activity & Profile Hub"
+                    onClick={() => onOpenAuthModal('public')}
+                    className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
+                    title="Sign In or Register"
                   >
                     <User className="w-3.5 h-3.5 text-[#c4a47c]" />
-                    <span className="truncate max-w-[120px]">{activeSession.name.split(' ')[0]} (My Account)</span>
+                    <span>Sign In</span>
                   </button>
 
                   <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="p-1.5 bg-white border border-[#1a1a1a] hover:bg-black/5 cursor-pointer font-bold"
-                    title="User Account Options"
+                    onClick={() => setUserMenuOpen((prev) => !prev)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-white hover:bg-gray-100 text-[#1a1a1a] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs"
+                    title="Open User Navigation Menu"
+                    aria-expanded={userMenuOpen}
                   >
-                    <ChevronDown className="w-3.5 h-3.5 text-gray-700" />
+                    <Menu className="w-3.5 h-3.5 text-[#1a1a1a]" />
+                    <span className="font-bold">User Menu</span>
+                    <ChevronDown className={`w-3 h-3 text-gray-600 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
+                </div>
+              )}
+            </div>
 
-                  {userDropdownOpen && (
-                    <div 
-                      className="absolute right-0 top-full mt-1.5 w-64 bg-[#fdfcf9] border border-[#1a1a1a] shadow-xl py-2 z-50 font-mono-luxury text-xs divide-y divide-gray-100"
-                      onMouseLeave={() => setUserDropdownOpen(false)}
+            {/* =================================================================== */}
+            {/* EXPANDABLE LUXURY USER MENU DROPDOWN PANEL */}
+            {/* =================================================================== */}
+            {userMenuOpen && (
+              <div 
+                className="absolute right-0 top-full mt-2 w-84 sm:w-96 max-w-[94vw] bg-[#fdfcf9] border-2 border-[#1a1a1a] shadow-2xl z-50 font-mono-luxury text-xs max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-gray-200"
+              >
+                {/* 1. USER IDENTITY / WELCOME HEADER */}
+                <div className="p-3.5 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] text-[#fdfcf9]">
+                  <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <span className="editorial-label text-[#c4a47c] text-[10px] font-bold uppercase tracking-wider">
+                      User Navigation Menu
+                    </span>
+                    <button
+                      onClick={() => setUserMenuOpen(false)}
+                      className="text-gray-400 hover:text-white p-1 cursor-pointer transition-colors"
+                      title="Close User Menu"
                     >
-                      <div className="px-3 py-1.5 mb-1 bg-gray-50 border-b border-[#1a1a1a]/15">
-                        <span className="font-bold text-[#1a1a1a] block truncate">{activeSession.name}</span>
-                        <span className="text-[10px] text-[#c4a47c] font-black uppercase tracking-wider">{activeSession.role} • VERIFIED ACCOUNT</span>
-                      </div>
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
 
-                      {/* ACTIVITY GROUP */}
-                      <div className="py-1">
-                        <div className="px-3 py-0.5 text-[9px] uppercase font-bold text-gray-400">
-                          My Activity
+                  {activeSession ? (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#c4a47c] text-black font-black text-sm flex items-center justify-center shrink-0 border border-white">
+                          {activeSession.name.charAt(0).toUpperCase()}
                         </div>
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('activity', 'contacted');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer"
-                        >
-                          <span className="flex items-center gap-2">
-                            <Phone className="w-3.5 h-3.5 text-[#c4a47c]" />
-                            <span>Contacted Properties</span>
-                          </span>
-                          <span className="text-[10px] text-gray-400">Inquiries</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('activity', 'shortlisted');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer"
-                        >
-                          <span className="flex items-center gap-2">
-                            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                            <span>Shortlisted Properties ({savedCount})</span>
-                          </span>
-                          <span className="text-[10px] text-gray-400">Saved</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('activity', 'viewed');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer"
-                        >
-                          <span className="flex items-center gap-2">
-                            <Clock className="w-3.5 h-3.5 text-blue-500" />
-                            <span>Viewed History</span>
-                          </span>
-                          <span className="text-[10px] text-gray-400">Recently Browsed</span>
-                        </button>
-                      </div>
-
-                      {/* ACCOUNT MANAGEMENT & SERVICES */}
-                      <div className="py-1">
-                        <div className="px-3 py-0.5 text-[9px] uppercase font-bold text-gray-400">
-                          Account & Services
+                        <div className="overflow-hidden">
+                          <h4 className="font-serif-luxury font-bold text-sm text-white truncate">
+                            {activeSession.name}
+                          </h4>
+                          <p className="text-[11px] text-gray-300 truncate">
+                            {activeSession.email}
+                          </p>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <span className="bg-[#c4a47c] text-black text-[9px] font-black uppercase px-1.5 py-0.2">
+                              {activeSession.role}
+                            </span>
+                            <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                              <span>Verified Member</span>
+                            </span>
+                          </div>
                         </div>
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('profile');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer font-bold text-[#1a1a1a]"
-                        >
-                          <User className="w-3.5 h-3.5 text-[#005CA8]" />
-                          <span>Manage Profile</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('service');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer"
-                        >
-                          <Headphones className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Customer Service (24/7 Desk)</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('feedback');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer"
-                        >
-                          <Star className="w-3.5 h-3.5 text-amber-500" />
-                          <span>Give Feedback</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('security');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer"
-                        >
-                          <KeyRound className="w-3.5 h-3.5 text-purple-600" />
-                          <span>Change Password</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            onOpenUserHub?.('communication');
-                          }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer"
-                        >
-                          <Bell className="w-3.5 h-3.5 text-rose-600" />
-                          <span>Communication Settings</span>
-                        </button>
                       </div>
 
-                      <div className="pt-1">
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onOpenUserHub?.('activity');
+                        }}
+                        className="w-full py-1.5 px-3 bg-white/10 hover:bg-white/20 border border-white/20 text-[#c4a47c] font-bold text-xs uppercase flex items-center justify-between transition-colors cursor-pointer"
+                      >
+                        <span>Open My Account Hub</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-9 h-9 bg-[#c4a47c] text-black flex items-center justify-center font-black text-xs">
+                          NS
+                        </div>
+                        <div>
+                          <h4 className="font-serif-luxury font-bold text-sm text-white">
+                            Welcome to NS Properties
+                          </h4>
+                          <p className="text-[10px] text-gray-300">
+                            Search, shortlist & claim verified luxury deals
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 pt-1">
                         <button
                           onClick={() => {
-                            setUserDropdownOpen(false);
-                            onLogout();
+                            setUserMenuOpen(false);
+                            onOpenAuthModal('public');
                           }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-red-50 text-red-600 flex items-center gap-2 cursor-pointer font-bold"
+                          className="py-1.5 px-2 bg-[#c4a47c] hover:bg-[#b09066] text-black font-black uppercase text-xs text-center cursor-pointer transition-colors shadow-xs"
                         >
-                          <LogOut className="w-3.5 h-3.5" />
-                          <span>Logout</span>
+                          Sign In / Register
+                        </button>
+                        <button
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            onOpenAuthModal('private');
+                          }}
+                          className="py-1.5 px-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold uppercase text-[10px] text-center cursor-pointer transition-colors"
+                        >
+                          Private Portals
                         </button>
                       </div>
                     </div>
                   )}
                 </div>
-              )}
-            </div>
-          ) : (
-            /* PUBLIC USER WHEN LOGGED OUT: Normal Login / Register Button only */
-            <button
-              onClick={() => onOpenAuthModal('public')}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
-              title="Sign In or Register for NS Properties"
-            >
-              <User className="w-3.5 h-3.5 text-[#c4a47c]" />
-              <span>Login / Register</span>
-            </button>
-          )}
+
+                {/* 2. ACTIVITY & SHORTLIST QUICK STATS */}
+                <div className="grid grid-cols-3 divide-x divide-gray-200 bg-amber-50/60 text-center py-2 text-xs">
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenSaved();
+                    }}
+                    className="px-2 py-1 hover:bg-amber-100/50 cursor-pointer transition-colors"
+                    title="View Saved Properties"
+                  >
+                    <span className="text-[10px] text-gray-500 uppercase block font-bold">Saved</span>
+                    <strong className="text-sm font-black text-black">{savedCount}</strong>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenVisits();
+                    }}
+                    className="px-2 py-1 hover:bg-amber-100/50 cursor-pointer transition-colors"
+                    title="View Scheduled Visits"
+                  >
+                    <span className="text-[10px] text-emerald-800 uppercase block font-bold">Visits (Free)</span>
+                    <strong className="text-sm font-black text-emerald-800">{scheduledVisitsCount}</strong>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenCompare();
+                    }}
+                    className="px-2 py-1 hover:bg-amber-100/50 cursor-pointer transition-colors"
+                    title="Compare Properties"
+                  >
+                    <span className="text-[10px] text-gray-500 uppercase block font-bold">Compare</span>
+                    <strong className="text-sm font-black text-black">{compareCount}/3</strong>
+                  </button>
+                </div>
+
+                {/* 3. SECTION: MY ACTIVITY & PERSONAL HUB */}
+                <div className="p-2 space-y-0.5">
+                  <div className="px-2.5 py-1 text-[9px] uppercase font-bold text-gray-400 tracking-wider">
+                    My Activity & History
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenUserHub?.('activity', 'contacted');
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Phone className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Contacted Properties</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">Inquiries</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenSaved();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Heart className={`w-3.5 h-3.5 ${savedCount > 0 ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
+                      <span>Shortlisted Properties</span>
+                    </span>
+                    <span className="text-[10px] bg-gray-100 px-1.5 py-0.2 font-bold">{savedCount}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenVisits();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <CalendarCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Scheduled Site Visits</span>
+                    </span>
+                    <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2">
+                      100% FREE
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenUserHub?.('activity', 'viewed');
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Recently Viewed Properties</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">History</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenUserHub?.('activity', 'offers');
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Tag className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>My Claimed Deals & Offers</span>
+                    </span>
+                    <span className="text-[9px] bg-[#c4a47c]/20 text-[#c4a47c] font-black px-1.5 py-0.2">DEALS</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenUserHub?.('activity', 'brochures');
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <FileText className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Downloaded Project Brochures</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">PDFs</span>
+                  </button>
+                </div>
+
+                {/* 4. SECTION: LISTINGS, OFFERS & PLANS */}
+                <div className="p-2 space-y-0.5">
+                  <div className="px-2.5 py-1 text-[9px] uppercase font-bold text-gray-400 tracking-wider">
+                    Listings & Partner Plans
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenPostProperty();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors font-bold text-[#1a1a1a]"
+                  >
+                    <span className="flex items-center gap-2">
+                      <PlusCircle className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Post Free Property Ad</span>
+                    </span>
+                    <span className="text-[9px] bg-black text-[#c4a47c] px-1.5 py-0.2 font-black">₹0 FREE</span>
+                  </button>
+
+                  {onOpenOffers && (
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        onOpenOffers();
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Tag className="w-3.5 h-3.5 text-[#c4a47c]" />
+                        <span>Special Offers & Festive Deals</span>
+                      </span>
+                      <span className="text-[10px] text-emerald-700 font-bold">Discounts</span>
+                    </button>
+                  )}
+
+                  {onOpenPlansModal && (
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        onOpenPlansModal();
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Crown className="w-3.5 h-3.5 text-[#c4a47c]" />
+                        <span>Agent & Builder Plans</span>
+                      </span>
+                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2">Free Visits</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* 5. SECTION: CALCULATORS & TOOLS */}
+                <div className="p-2 space-y-0.5">
+                  <div className="px-2.5 py-1 text-[9px] uppercase font-bold text-gray-400 tracking-wider">
+                    Calculators & Research
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenEmiCalc();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Calculator className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Home Loan EMI Calculator</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">Finance</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenMarketTrends();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <TrendingUp className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>City Price Trends & Heatmaps</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">Trends</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenCompare();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Scale className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Compare Properties</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">{compareCount}/3</span>
+                  </button>
+                </div>
+
+                {/* 6. SECTION: CUSTOMER SUPPORT & APP SETTINGS */}
+                <div className="p-2 space-y-0.5">
+                  <div className="px-2.5 py-1 text-[9px] uppercase font-bold text-gray-400 tracking-wider">
+                    Support & Preferences
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenUserHub?.('service');
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Headphones className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Customer Service Desk (24/7)</span>
+                    </span>
+                    <span className="text-[10px] text-emerald-600 font-bold">Online</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      const msg = `Hello NS Properties Concierge, I would like assistance with luxury property search.`;
+                      openWhatsAppChat(DEFAULT_CONTACT_PHONE, msg);
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>WhatsApp Concierge Chat</span>
+                    </span>
+                    <span className="text-[10px] text-emerald-700 font-bold">Instant</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenContactModal();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Phone className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Contact NS Properties</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">{DISPLAY_CONTACT_PHONE}</span>
+                  </button>
+
+                  {onOpenSettings && (
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        onOpenSettings();
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Settings className="w-3.5 h-3.5 text-gray-600" />
+                        <span>Preferences & Settings</span>
+                      </span>
+                    </button>
+                  )}
+
+                  {activeSession && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onOpenUserHub?.('profile');
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer transition-colors"
+                      >
+                        <User className="w-3.5 h-3.5 text-[#005CA8]" />
+                        <span>Manage Profile Details</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onOpenUserHub?.('security');
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center gap-2 cursor-pointer transition-colors"
+                      >
+                        <KeyRound className="w-3.5 h-3.5 text-purple-600" />
+                        <span>Change Password & Security</span>
+                      </button>
+                    </>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenDownloadModal();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Download className="w-3.5 h-3.5 text-black" />
+                      <span>Install App on Device (PWA)</span>
+                    </span>
+                    <span className="text-[9px] bg-black text-white px-1.5 py-0.2 font-bold">APP</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenShareModal();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Share2 className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Share NS Properties</span>
+                    </span>
+                  </button>
+                </div>
+
+                {/* 7. SECTION: AUTHORIZED CONSOLES (ROLE-BASED) */}
+                {(isOwner || isDeveloper || isStaff) && (
+                  <div className="p-2 bg-gray-50/80 space-y-1">
+                    <div className="px-2.5 py-1 text-[9px] uppercase font-bold text-gray-500 tracking-wider">
+                      Authorized Administration
+                    </div>
+
+                    {isOwner && onOpenOwnerConsole && (
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onOpenOwnerConsole();
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 bg-[#c4a47c]/20 hover:bg-[#c4a47c]/30 text-black border border-[#c4a47c] flex items-center justify-between cursor-pointer transition-colors font-bold"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Crown className="w-3.5 h-3.5 text-amber-700" />
+                          <span>App Owner Master Console</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+
+                    {isDeveloper && onOpenDeveloperConsole && (
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onOpenDeveloperConsole();
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 bg-cyan-950 text-cyan-300 hover:bg-cyan-900 border border-cyan-500 flex items-center justify-between cursor-pointer transition-colors font-bold"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+                          <span>Developer Technical Console (9 Tools)</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+
+                    {isStaff && onOpenStaffConsole && (
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onOpenStaffConsole();
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-500 flex items-center justify-between cursor-pointer transition-colors font-bold"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Users className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>Staff & Relationship Manager CRM</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* 8. FOOTER SESSION ACTION */}
+                <div className="p-3 bg-gray-50 flex items-center justify-between gap-2">
+                  {activeSession ? (
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="w-full py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-xs"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Logout ({activeSession.name.split(' ')[0]})</span>
+                    </button>
+                  ) : (
+                    <div className="w-full text-center text-[10px] text-gray-500 font-mono-luxury">
+                      <span className="text-[#1a1a1a] font-bold">NS Properties</span> • 100% Free Visits & RERA Compliant
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Download App CTA */}
           <button

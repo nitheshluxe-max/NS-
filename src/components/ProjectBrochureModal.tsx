@@ -437,7 +437,7 @@ export const ProjectBrochureModal: React.FC<ProjectBrochureModalProps> = ({
 
                   <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                     <span>Developer / Seller: <strong>{property.seller.name}</strong></span>
-                    <span className="text-emerald-600 font-bold">✓ 100% Genuine Direct Listing</span>
+                    <span className="text-emerald-600 font-bold">100% Genuine Direct Listing</span>
                   </div>
                 </div>
               )}
@@ -504,7 +504,7 @@ export const ProjectBrochureModal: React.FC<ProjectBrochureModalProps> = ({
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     {property.amenities.map((amenity, idx) => (
                       <div key={idx} className="flex items-center gap-2 p-2 bg-[#fdfcf9] border border-gray-200">
-                        <span className="text-[#c4a47c] font-bold">✦</span>
+                        <Sparkles className="w-3 h-3 text-[#c4a47c] shrink-0" />
                         <span className="text-gray-800 font-medium">{amenity}</span>
                       </div>
                     ))}

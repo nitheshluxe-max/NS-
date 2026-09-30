@@ -149,23 +149,25 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className="font-serif-luxury font-bold text-sm text-emerald-950 uppercase tracking-wide">
-                    100% Free Site Visits & Builder Offer Deals Access
+                    Plans: 100% Free Site Visits for Agents • Free Offer Deals for Developers & Builders
                   </h4>
                   <span className="bg-emerald-700 text-white text-[9px] font-black px-2 py-0.5 uppercase tracking-wider">
                     ₹0 Visit Fee
                   </span>
                 </div>
                 <p className="text-emerald-900 mt-1 text-xs leading-relaxed font-sans">
-                  Property inspections and site visits are <strong>100% FREE</strong> on NS Properties for Real Estate Agents, Project Developers, Builders, and Prospective Buyers. Browse, publish, and claim verified builder festival discounts, stamp duty waivers, and token rebate deals with zero platform visit fees.
+                  Property inspections and site visits are <strong>100% FREE</strong> on NS Properties for Real Estate Agents, Project Developers, Builders, and Prospective Buyers. Certified Agents enjoy unlimited ₹0 client visits, and Developers & Builders can publish and showcase verified festive discounts, stamp duty waivers, and token rebate deals with zero platform fees.
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono-luxury">
-              <span className="px-3 py-1.5 bg-white border border-emerald-700 font-bold text-emerald-900">
-                ✓ Free Agent Visits
+              <span className="px-3 py-1.5 bg-white border border-emerald-700 font-bold text-emerald-900 flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Free Agent Visits</span>
               </span>
-              <span className="px-3 py-1.5 bg-white border border-emerald-700 font-bold text-emerald-900">
-                ✓ Free Developer & Builder Deals
+              <span className="px-3 py-1.5 bg-white border border-emerald-700 font-bold text-emerald-900 flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Free Developer & Builder Deals</span>
               </span>
             </div>
           </div>
@@ -231,8 +233,9 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
                   }`}
                 >
                   {isPopular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c4a47c] text-black font-black text-[9px] uppercase px-3 py-0.5 tracking-wider shadow-xs">
-                      ★ MOST POPULAR
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c4a47c] text-black font-black text-[9px] uppercase px-3 py-0.5 tracking-wider shadow-xs flex items-center gap-1">
+                      <Star className="w-2.5 h-2.5 fill-black text-black" />
+                      <span>MOST POPULAR</span>
                     </div>
                   )}
 

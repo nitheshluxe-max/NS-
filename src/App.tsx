@@ -20,7 +20,8 @@ import {
   ShieldAlert,
   Users,
   Phone,
-  Lock
+  Lock,
+  AlertTriangle
 } from 'lucide-react';
 import { 
   Property, 
@@ -365,7 +366,7 @@ export default function App() {
   const [isStaffConsoleOpen, setIsStaffConsoleOpen] = useState(false);
   const [isUserHubOpen, setIsUserHubOpen] = useState(false);
   const [userHubTab, setUserHubTab] = useState<'activity' | 'profile' | 'service' | 'feedback' | 'security' | 'communication'>('activity');
-  const [userHubSubTab, setUserHubSubTab] = useState<'contacted' | 'shortlisted' | 'viewed'>('contacted');
+  const [userHubSubTab, setUserHubSubTab] = useState<'contacted' | 'shortlisted' | 'viewed' | 'offers' | 'brochures'>('contacted');
   const [viewedPropertyHistory, setViewedPropertyHistory] = useState<{ propertyId: string; viewedAt: string }[]>(() => {
     try {
       const raw = localStorage.getItem('NS_VIEWED_PROPERTIES_HISTORY');
@@ -851,8 +852,9 @@ export default function App() {
         <div className="bg-amber-500 text-black px-4 py-2 font-mono-luxury text-xs flex flex-wrap items-center justify-between gap-3 shadow-md border-b-2 border-black z-50">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-black animate-ping" />
+            <AlertTriangle className="w-4 h-4 text-black shrink-0" />
             <span className="font-bold">
-              ⚠️ SCHEDULED SYSTEM MAINTENANCE ENGAGED: Engineering team is performing database and read-replica index upgrades.
+              SCHEDULED SYSTEM MAINTENANCE ENGAGED: Engineering team is performing database and read-replica index upgrades.
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -909,6 +911,7 @@ export default function App() {
         activeCategory={activeCategoryNav}
         onSelectCategory={handleSelectCategoryNav}
         onOpenPlansModal={() => setIsPlansModalOpen(true)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenOffers={() => {
           const el = document.getElementById('offers-deals-section');
           if (el) {
@@ -1237,7 +1240,7 @@ export default function App() {
                     }} 
                     className="hover:text-[#c4a47c] cursor-pointer text-[#1a1a1a] font-bold flex items-center gap-1.5"
                   >
-                    <span>Special Offers & Festive Deals</span>
+                    <span>Special Offers & Builder Deals (Free Visits)</span>
                   </button>
                 </li>
                 <li>
@@ -1245,7 +1248,18 @@ export default function App() {
                     onClick={() => setIsPlansModalOpen(true)} 
                     className="hover:text-[#c4a47c] cursor-pointer text-[#1a1a1a] font-bold flex items-center gap-1.5"
                   >
-                    <span>Agent & Builder Plans</span>
+                    <span>Free Visit Plans for Agents & Builder Offer Deals</span>
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      setUserHubTab('activity');
+                      setIsUserHubOpen(true);
+                    }} 
+                    className="hover:text-[#c4a47c] cursor-pointer text-[#1a1a1a] font-bold flex items-center gap-1.5"
+                  >
+                    <span>Menu for User & Account Hub</span>
                   </button>
                 </li>
                 <li>
@@ -1365,7 +1379,7 @@ export default function App() {
                       className="hover:text-emerald-900 cursor-pointer font-bold text-emerald-900 bg-emerald-50 border border-emerald-300 px-2 py-1 flex items-center gap-1.5"
                     >
                       <Users className="w-3.5 h-3.5 text-emerald-700" />
-                      <span>👔 Staff & Agent Dashboard</span>
+                      <span>Staff & Agent Dashboard</span>
                     </button>
                   </li>
                 )}
@@ -1764,18 +1778,20 @@ export default function App() {
             <button
               type="button"
               onClick={() => setIsOwnerConsoleOpen(true)}
-              className="px-2 py-1 bg-[#c4a47c] text-black font-bold text-[10px] uppercase hover:bg-[#b09066] transition-colors cursor-pointer border border-black"
+              className="px-2 py-1 bg-[#c4a47c] text-black font-bold text-[10px] uppercase hover:bg-[#b09066] transition-colors cursor-pointer border border-black flex items-center gap-1"
               title="Open App Owner Master Console"
             >
-              👑 Owner
+              <Crown className="w-3 h-3 text-black" />
+              <span>Owner</span>
             </button>
             <button
               type="button"
               onClick={() => setIsDeveloperConsoleOpen(true)}
-              className="px-2 py-1 bg-cyan-900 text-cyan-200 font-bold text-[10px] uppercase hover:bg-cyan-800 transition-colors cursor-pointer border border-cyan-400/40"
+              className="px-2 py-1 bg-cyan-900 text-cyan-200 font-bold text-[10px] uppercase hover:bg-cyan-800 transition-colors cursor-pointer border border-cyan-400/40 flex items-center gap-1"
               title="Open Developer Technical Console"
             >
-              💻 Dev Tech
+              <Terminal className="w-3 h-3 text-cyan-300" />
+              <span>Dev Tech</span>
             </button>
             <button
               type="button"

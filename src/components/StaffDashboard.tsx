@@ -223,7 +223,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({
               {successMessage}
             </span>
             <button onClick={() => setSuccessMessage('')} className="text-emerald-700 hover:text-black font-bold">
-              ✕
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         )}
@@ -338,7 +338,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({
                   />
                   {leadSearch && (
                     <button onClick={() => setLeadSearch('')} className="text-gray-400 hover:text-black">
-                      ✕
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -632,7 +632,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({
 
                     <div className="mt-3 pt-2 border-t border-[#1a1a1a]/15 flex items-center justify-between">
                       <span className="text-[10px] font-mono-luxury text-emerald-700 font-bold">
-                        {prop.isVerified ? '✓ Verified Listing' : 'Standard Listing'}
+                        {prop.isVerified ? 'Verified Listing' : 'Standard Listing'}
                       </span>
                       {onSelectProperty && (
                         <button

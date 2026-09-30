@@ -246,7 +246,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             }`}
           >
             <Lock className="w-3.5 h-3.5 text-[#c4a47c]" />
-            <span>Private Dashboards 🔒</span>
+            <span>Private Dashboards</span>
           </button>
         </div>
 
@@ -603,7 +603,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     className="w-full py-2.5 bg-[#c4a47c] hover:bg-[#b09066] text-black font-bold uppercase text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm border border-black mb-2 font-mono-luxury"
                   >
                     <Crown className="w-4 h-4 text-black" />
-                    <span>⚡ 1-Click Instant Owner Login (nitheshluxe@gmail.com)</span>
+                    <span>1-Click Instant Owner Login (nitheshluxe@gmail.com)</span>
                   </button>
                 )}
 
@@ -625,7 +625,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     className="w-full py-2.5 bg-cyan-400 hover:bg-cyan-300 text-black font-bold uppercase text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm mb-2 font-mono-luxury"
                   >
                     <Terminal className="w-4 h-4 text-black" />
-                    <span>⚡ 1-Click Instant Developer Login</span>
+                    <span>1-Click Instant Developer Login</span>
                   </button>
                 )}
 
@@ -647,7 +647,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm mb-2 font-mono-luxury"
                   >
                     <Users className="w-4 h-4 text-white" />
-                    <span>⚡ 1-Click Instant Staff Login</span>
+                    <span>1-Click Instant Staff Login</span>
                   </button>
                 )}
               </div>

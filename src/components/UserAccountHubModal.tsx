@@ -602,7 +602,7 @@ export const UserAccountHubModal: React.FC<UserAccountHubModalProps> = ({
                                 <p className="flex items-center gap-1">
                                   <span className="text-gray-400">Status:</span>
                                   <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 border border-emerald-200">
-                                    {lead.status === 'Contacted' ? '✓ Owner Contacted' : '✓ Request Active'}
+                                    {lead.status === 'Contacted' ? 'Owner Contacted' : 'Request Active'}
                                   </span>
                                 </p>
                               </div>
@@ -1374,11 +1374,11 @@ export const UserAccountHubModal: React.FC<UserAccountHubModalProps> = ({
                           </button>
                         ))}
                         <span className="ml-2 font-bold text-sm text-[#1a1a1a]">
-                          {feedbackRating === 5 && '🌟 Excellent (5/5)'}
-                          {feedbackRating === 4 && '👍 Very Good (4/5)'}
-                          {feedbackRating === 3 && '👌 Good (3/5)'}
-                          {feedbackRating === 2 && '⚠️ Fair (2/5)'}
-                          {feedbackRating === 1 && '👎 Needs Improvement (1/5)'}
+                          {feedbackRating === 5 && 'Excellent (5/5)'}
+                          {feedbackRating === 4 && 'Very Good (4/5)'}
+                          {feedbackRating === 3 && 'Good (3/5)'}
+                          {feedbackRating === 2 && 'Fair (2/5)'}
+                          {feedbackRating === 1 && 'Needs Improvement (1/5)'}
                         </span>
                       </div>
                     </div>

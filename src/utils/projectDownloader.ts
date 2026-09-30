@@ -36,7 +36,7 @@ export async function downloadProjectZip(onProgress?: (percent: number) => void)
 
 Comprehensive Indian Real Estate & Property Search, Buying, Renting, and Listing Portal.
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Prerequisites
 Make sure you have [Node.js](https://nodejs.org) (v18 or later) installed on your computer.

@@ -215,7 +215,7 @@ export async function generateProjectBrochurePdf(
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(7.5);
       doc.setTextColor(196, 164, 124);
-      doc.text('✦', amX + 2.5, amY + 3.5);
+      doc.text('>', amX + 2.5, amY + 3.5);
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7.5);

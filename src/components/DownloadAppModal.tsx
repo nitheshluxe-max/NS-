@@ -17,7 +17,9 @@ import {
   MessageCircle,
   Send,
   Mail,
-  QrCode
+  QrCode,
+  Zap,
+  RefreshCw
 } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { downloadProjectZip } from '../utils/projectDownloader';
@@ -251,18 +253,18 @@ export const DownloadAppModal: React.FC<DownloadAppModalProps> = ({ onClose, onO
 
               {/* Benefits Box */}
               <div className="grid grid-cols-3 gap-3 pt-2">
-                <div className="border border-slate-200 rounded-xl p-3 text-center bg-slate-50/50">
-                  <span className="text-xl">⚡</span>
+                <div className="border border-slate-200 rounded-xl p-3 text-center bg-slate-50/50 flex flex-col items-center">
+                  <Zap className="w-5 h-5 text-amber-500 mb-1" />
                   <h5 className="font-bold text-xs text-slate-900 mt-1">Instant Speed</h5>
                   <p className="text-[11px] text-slate-500 mt-0.5">Loads offline with zero lag</p>
                 </div>
-                <div className="border border-slate-200 rounded-xl p-3 text-center bg-slate-50/50">
-                  <span className="text-xl">📱</span>
+                <div className="border border-slate-200 rounded-xl p-3 text-center bg-slate-50/50 flex flex-col items-center">
+                  <Smartphone className="w-5 h-5 text-blue-500 mb-1" />
                   <h5 className="font-bold text-xs text-slate-900 mt-1">Native Feel</h5>
                   <p className="text-[11px] text-slate-500 mt-0.5">Runs fullscreen with no browser bars</p>
                 </div>
-                <div className="border border-slate-200 rounded-xl p-3 text-center bg-slate-50/50">
-                  <span className="text-xl">🔄</span>
+                <div className="border border-slate-200 rounded-xl p-3 text-center bg-slate-50/50 flex flex-col items-center">
+                  <RefreshCw className="w-5 h-5 text-emerald-500 mb-1" />
                   <h5 className="font-bold text-xs text-slate-900 mt-1">Auto-Updates</h5>
                   <p className="text-[11px] text-slate-500 mt-0.5">Always runs the latest listings</p>
                 </div>
@@ -317,7 +319,7 @@ export const DownloadAppModal: React.FC<DownloadAppModalProps> = ({ onClose, onO
                 </p>
                 <ol className="text-xs text-slate-700 space-y-2 list-decimal list-inside bg-white p-3 rounded-lg border border-slate-200">
                   <li>Look at the <strong>top-right corner</strong> of your Google AI Studio browser window.</li>
-                  <li>Click on the <strong>⚙️ Settings</strong> icon or the <strong>"..." (Menu)</strong>.</li>
+                  <li>Click on the <strong>Settings</strong> icon or the <strong>"..." (Menu)</strong>.</li>
                   <li>Click <strong>"Download as ZIP"</strong> (or <strong>"Export to GitHub"</strong>).</li>
                   <li>Extract the downloaded ZIP file to any folder on your computer.</li>
                 </ol>

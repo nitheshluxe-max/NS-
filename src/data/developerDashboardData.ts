@@ -541,7 +541,7 @@ export const INITIAL_DATABASE_METADATA: DbTableMetadata[] = [
 export const INITIAL_PUSH_TEMPLATES: PushNotificationTemplate[] = [
   {
     id: 'push-01',
-    title: '⚡ Price Drop Alert: 3 BHK in Sobha Dream Acres',
+    title: 'Price Drop Alert: 3 BHK in Sobha Dream Acres',
     body: 'Exclusive ₹ 15 Lakh price revision just announced. Tap to view updated floor plan & photos.',
     icon: '/icon.svg',
     url: '/?filter=recent',
@@ -551,7 +551,7 @@ export const INITIAL_PUSH_TEMPLATES: PushNotificationTemplate[] = [
   },
   {
     id: 'push-02',
-    title: '🏢 New Developer Launch: Godrej Splendour Phase 2',
+    title: 'New Developer Launch: Godrej Splendour Phase 2',
     body: 'Early bird inventory unlocked for certified agents and VIP buyers. Direct booking open.',
     icon: '/icon.svg',
     url: '/?city=Bengaluru',
@@ -561,7 +561,7 @@ export const INITIAL_PUSH_TEMPLATES: PushNotificationTemplate[] = [
   },
   {
     id: 'push-03',
-    title: '🛠️ Scheduled System Update in 15 Minutes',
+    title: 'Scheduled System Update in 15 Minutes',
     body: 'Dev testing notification: Server maintenance window starting at 02:00 AM IST.',
     icon: '/icon.svg',
     url: '/',
@@ -575,7 +575,7 @@ export const INITIAL_PUSH_LOGS: PushDispatchLog[] = [
   {
     id: 'dispatch-001',
     timestamp: '24 Sep 2026, 17:15',
-    title: '⚡ Price Drop Alert: 3 BHK in Sobha Dream Acres',
+    title: 'Price Drop Alert: 3 BHK in Sobha Dream Acres',
     topic: 'all_users',
     sentCount: 284,
     deliveredCount: 279,
@@ -585,7 +585,7 @@ export const INITIAL_PUSH_LOGS: PushDispatchLog[] = [
   {
     id: 'dispatch-002',
     timestamp: '23 Sep 2026, 10:00',
-    title: '🏢 New Developer Launch: Godrej Splendour Phase 2',
+    title: 'New Developer Launch: Godrej Splendour Phase 2',
     topic: 'registered_agents',
     sentCount: 38,
     deliveredCount: 38,

@@ -557,7 +557,7 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
                         <span className={`self-end w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
                           isAdded ? 'bg-[#005CA8] text-white font-bold' : 'bg-white/80 text-slate-800'
                         }`}>
-                          {isAdded ? '✓' : '+'}
+                          {isAdded ? <Check className="w-2.5 h-2.5 text-white" /> : '+'}
                         </span>
                       </div>
                     </button>

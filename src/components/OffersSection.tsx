@@ -51,7 +51,7 @@ export const OffersSection: React.FC<OffersSectionProps> = ({
 
   const categories = [
     { id: 'all', label: 'All Deals', count: validOffers.length },
-    { id: 'featured', label: '★ Featured Offers', count: validOffers.filter(o => o.featured).length },
+    { id: 'featured', label: 'Featured Offers', count: validOffers.filter(o => o.featured).length },
     { id: 'festival', label: 'Diwali & Fest Concessions', count: validOffers.filter(o => o.category === 'festival').length },
     { id: 'limited_time', label: 'Limited-Time Deals', count: validOffers.filter(o => o.category === 'limited_time').length },
     { id: 'property_discount', label: 'Property Price Cuts', count: validOffers.filter(o => o.category === 'property_discount').length },
@@ -164,7 +164,7 @@ export const OffersSection: React.FC<OffersSectionProps> = ({
                       </span>
                       {offer.featured && (
                         <span className="bg-[#1a1a1a] text-[#c4a47c] text-[9px] font-bold px-2 py-0.5 uppercase border border-[#c4a47c]/40">
-                          ★ HOT DEAL
+                          HOT DEAL
                         </span>
                       )}
                       <span className="bg-emerald-800 text-white text-[9px] font-bold px-2 py-0.5 uppercase border border-emerald-950 shadow-xs">

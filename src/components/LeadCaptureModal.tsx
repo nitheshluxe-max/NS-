@@ -81,15 +81,15 @@ export const LeadCaptureModal: React.FC<LeadCaptureModalProps> = ({
   };
 
   const handleNotifyOwnerWhatsApp = () => {
-    const msg = `🔔 *NEW CLIENT INQUIRY - NS Properties Portal*\n\n` +
-      `👤 *Client Name:* ${name}\n` +
-      `📱 *Mobile No:* ${phone}\n` +
-      `📧 *Email ID:* ${email}\n` +
-      `🎯 *Looking To:* ${purpose}\n` +
-      `📍 *Target City:* ${selectedCity}\n` +
-      `💰 *Budget Range:* ${budget}\n` +
-      (defaultPropertyTitle ? `🏢 *Interested In:* ${defaultPropertyTitle}\n` : '') +
-      `⏰ *Time:* ${new Date().toLocaleTimeString('en-IN')}\n\n` +
+    const msg = `*NEW CLIENT INQUIRY - NS Properties Portal*\n\n` +
+      `*Client Name:* ${name}\n` +
+      `*Mobile No:* ${phone}\n` +
+      `*Email ID:* ${email}\n` +
+      `*Looking To:* ${purpose}\n` +
+      `*Target City:* ${selectedCity}\n` +
+      `*Budget Range:* ${budget}\n` +
+      (defaultPropertyTitle ? `*Interested In:* ${defaultPropertyTitle}\n` : '') +
+      `*Time:* ${new Date().toLocaleTimeString('en-IN')}\n\n` +
       `_Please connect with me on WhatsApp / Call with available properties._`;
 
     openWhatsAppChat(DEFAULT_CONTACT_PHONE, msg);

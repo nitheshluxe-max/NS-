@@ -208,11 +208,11 @@ export const FeaturedPropertiesShowcase: React.FC<FeaturedPropsSectionProps> = (
 
                     <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
                       <span className="bg-[#1a1a1a] text-[#c4a47c] font-mono-luxury text-[10px] font-bold px-2 py-0.5 uppercase border border-[#c4a47c]/40">
-                        ★ Featured
+                        Featured
                       </span>
                       {prop.isVerified && (
                         <span className="bg-emerald-600 text-white font-mono-luxury text-[9px] font-bold px-1.5 py-0.2 uppercase">
-                          ✓ RERA
+                          RERA Verified
                         </span>
                       )}
                     </div>

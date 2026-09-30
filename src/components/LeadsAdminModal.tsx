@@ -468,7 +468,7 @@ export const LeadsAdminModal: React.FC<LeadsAdminModalProps> = ({
                       </span>
                     </div>
                     <p className="text-xs text-[#1a1a1a]/80 leading-relaxed">
-                      The "Leads Customer Option" is placed inside the <strong>Settings</strong> menu (accessible from header ⚙️ Settings and footer). It enables immediate access to customer phone records, floor plan unlock leads, property inquiries, and 1-click WhatsApp follow-ups.
+                      The "Leads Customer Option" is placed inside the <strong>Settings</strong> menu (accessible from header Settings and footer). It enables immediate access to customer phone records, floor plan unlock leads, property inquiries, and 1-click WhatsApp follow-ups.
                     </p>
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       <button

@@ -249,7 +249,7 @@ export const OfferDetailModal: React.FC<OfferDetailModalProps> = ({
                 <ul className="space-y-2 text-xs text-gray-700 font-sans">
                   {offer.termsAndConditions.map((term, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <span className="text-[#c4a47c] font-bold shrink-0 mt-0.5 font-mono-luxury">✦</span>
+                      <Sparkles className="w-3.5 h-3.5 text-[#c4a47c] shrink-0 mt-0.5" />
                       <span>{term}</span>
                     </li>
                   ))}

@@ -30,7 +30,8 @@ import {
   Info,
   Radio,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Crown
 } from 'lucide-react';
 import { 
   DevSystemVitals, 
@@ -198,7 +199,7 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
   // -------------------------------------------------------------
   const [pushTemplates, setPushTemplates] = useState<PushNotificationTemplate[]>(INITIAL_PUSH_TEMPLATES);
   const [pushDispatchLogs, setPushDispatchLogs] = useState<PushDispatchLog[]>(INITIAL_PUSH_LOGS);
-  const [pushTitle, setPushTitle] = useState('⚡ Price Drop Alert: 3 BHK in Sobha Dream Acres');
+  const [pushTitle, setPushTitle] = useState('Price Drop Alert: 3 BHK in Sobha Dream Acres');
   const [pushBody, setPushBody] = useState('Exclusive ₹ 15 Lakh price revision just announced. Tap to view updated floor plan & photos.');
   const [pushTopic, setPushTopic] = useState<'all_users' | 'registered_agents' | 'buyers' | 'dev_cohort'>('all_users');
   const [pushDeepLink, setPushDeepLink] = useState('/?filter=recent');
@@ -887,7 +888,7 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
             { id: 'push', label: '7. Push Notifications', icon: Bell },
             { id: 'maintenance', label: '8. Maintenance Mode', icon: AlertOctagon, alert: vitals.isMaintenanceMode },
             { id: 'settings', label: '9. Dev Settings', icon: Settings },
-            { id: 'boundary', label: '🔒 Owner Boundary', icon: Lock }
+            { id: 'boundary', label: 'Owner Boundary', icon: Lock }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -1618,7 +1619,7 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
                     >
                       {dbTables.map((t) => (
                         <option key={t.name} value={t.name}>
-                          {t.isRestrictedCustomerPii ? `🔒 ${t.name} [RESTRICTED]` : t.name}
+                          {t.isRestrictedCustomerPii ? `[RESTRICTED] ${t.name}` : t.name}
                         </option>
                       ))}
                     </select>
@@ -1675,8 +1676,9 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
                           </td>
                           <td className="p-2.5">
                             {col.isPii ? (
-                              <span className="px-1.5 py-0.5 bg-red-950 text-red-300 border border-red-500 text-[9px] font-bold uppercase">
-                                🔒 Masked PII
+                              <span className="px-1.5 py-0.5 bg-red-950 text-red-300 border border-red-500 text-[9px] font-bold uppercase flex items-center gap-1 w-fit">
+                                <Lock className="w-2.5 h-2.5" />
+                                <span>Masked PII</span>
                               </span>
                             ) : (
                               <span className="text-slate-400 text-[10px]">Technical Readable</span>
@@ -1818,7 +1820,7 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
                       required
                       value={pushTitle}
                       onChange={(e) => setPushTitle(e.target.value)}
-                      placeholder="⚡ Price Drop Alert: 3 BHK in Sobha Dream Acres"
+                      placeholder="Price Drop Alert: 3 BHK in Sobha Dream Acres"
                       className="w-full px-3 py-2 bg-[#0a0f1d] border border-slate-700 text-slate-100 focus:border-purple-400 outline-none"
                     />
                   </div>
@@ -2235,8 +2237,9 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
                   <div className="p-4 bg-emerald-950/30 border border-emerald-500/50 space-y-2">
-                    <span className="font-bold text-emerald-300 uppercase text-[11px] block">
-                      ✅ Granted Developer Technical Privileges:
+                    <span className="font-bold text-emerald-300 uppercase text-[11px] block flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Granted Developer Technical Privileges:</span>
                     </span>
                     <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
                       <li>Deploying application updates, releases & semantic versioning</li>
@@ -2251,8 +2254,9 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
                   </div>
 
                   <div className="p-4 bg-red-950/30 border border-red-500/50 space-y-2">
-                    <span className="font-bold text-red-300 uppercase text-[11px] block">
-                      🚫 Strictly Prohibited & Blocked Developer Zones:
+                    <span className="font-bold text-red-300 uppercase text-[11px] block flex items-center gap-1.5">
+                      <ShieldAlert className="w-3.5 h-3.5 text-red-400" />
+                      <span>Strictly Prohibited & Blocked Developer Zones:</span>
                     </span>
                     <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
                       <li>Customer Personal Data (buyer phone numbers, private emails)</li>
@@ -2298,9 +2302,10 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
                         onClose();
                         onOpenOwnerConsole();
                       }}
-                      className="px-4 py-2 bg-[#c4a47c] text-black font-bold uppercase hover:bg-[#b09066] transition-colors cursor-pointer"
+                      className="px-4 py-2 bg-[#c4a47c] text-black font-bold uppercase hover:bg-[#b09066] transition-colors cursor-pointer flex items-center gap-1.5"
                     >
-                      👑 Open Owner Master Console
+                      <Crown className="w-4 h-4 text-black" />
+                      <span>Open Owner Master Console</span>
                     </button>
                   </div>
                 )}
