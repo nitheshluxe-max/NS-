@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="40%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0A0F1D"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1024" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Subtle Architectural Grid Lines -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="100" x2="1024" y2="100"/>
+    <line x1="0" y1="200" x2="1024" y2="200"/>
+    <line x1="0" y1="300" x2="1024" y2="300"/>
+    <line x1="0" y1="400" x2="1024" y2="400"/>
+    <line x1="160" y1="0" x2="160" y2="500"/>
+    <line x1="320" y1="0" x2="320" y2="500"/>
+    <line x1="480" y1="0" x2="480" y2="500"/>
+    <line x1="640" y1="0" x2="640" y2="500"/>
+    <line x1="800" y1="0" x2="800" y2="500"/>
+  </g>
+
+  <!-- Skyline Silhouette Silhouette Background Right -->
+  <g fill="#ffffff" opacity="0.05">
+    <rect x="620" y="160" width="60" height="340" rx="4"/>
+    <rect x="690" y="100" width="75" height="400" rx="4"/>
+    <rect x="780" y="140" width="55" height="360" rx="4"/>
+    <rect x="850" y="80" width="90" height="420" rx="4"/>
+    <rect x="955" y="190" width="60" height="310" rx="4"/>
+  </g>
+
+  <!-- Left Side: Brand & Hero Messaging -->
+  <g transform="translate(80, 80)">
+    <!-- Badge -->
+    <rect width="210" height="30" rx="4" fill="#C4A47C" fill-opacity="0.2" stroke="#C4A47C" stroke-width="1.2"/>
+    <text x="105" y="20" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="11" font-weight="700" fill="#F3E8FF" text-anchor="middle" letter-spacing="2">OFFICIAL MOBILE APP</text>
+
+    <!-- Main Title -->
+    <text x="0" y="80" font-family="'Playfair Display', Georgia, serif" font-size="48" font-weight="800" fill="#FFFFFF" letter-spacing="1">NS Properties</text>
+    
+    <!-- Gold Subtitle -->
+    <text x="0" y="115" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="20" font-weight="700" fill="url(#goldGrad)" letter-spacing="4">LUXURY INDIAN REAL ESTATE</text>
+
+    <!-- Value Propositions -->
+    <text x="0" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#E2E8F0" font-weight="400">
+      Buy • Rent • List Verified Villas, Apartments &amp; Plots
+    </text>
+
+    <!-- Feature Tags -->
+    <g transform="translate(0, 195)">
+      <!-- Tag 1 -->
+      <rect x="0" y="0" width="135" height="32" rx="4" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+      <text x="67" y="20" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700" fill="#38BDF8" text-anchor="middle">RERA VERIFIED</text>
+
+      <!-- Tag 2 -->
+      <rect x="145" y="0" width="150" height="32" rx="4" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+      <text x="220" y="20" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700" fill="#34D399" text-anchor="middle">100% FREE VISITS</text>
+
+      <!-- Tag 3 -->
+      <rect x="305" y="0" width="145" height="32" rx="4" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+      <text x="377" y="20" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700" fill="#FBBF24" text-anchor="middle">FESTIVE DEALS</text>
+    </g>
+
+    <!-- Bottom Rating Strip -->
+    <g transform="translate(0, 260)">
+      <text x="0" y="16" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="700" fill="#CBD5E1">Rated 4.8 / 5.0</text>
+      <text x="100" y="16" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" fill="#94A3B8">• Bangalore • Mumbai • Delhi NCR • Hyderabad</text>
+    </g>
+  </g>
+
+  <!-- Right Side: Luxury App Device Mockup Frame -->
+  <g transform="translate(680, 50)" filter="url(#shadow)">
+    <!-- Device Frame -->
+    <rect width="250" height="420" rx="32" fill="#020617" stroke="#334155" stroke-width="4"/>
+    <!-- Screen View -->
+    <rect x="10" y="10" width="230" height="400" rx="24" fill="#FDFCF9"/>
+    
+    <!-- Top Notch -->
+    <rect x="85" y="15" width="80" height="12" rx="6" fill="#0F172A"/>
+
+    <!-- App Header in Mockup -->
+    <rect x="10" y="36" width="230" height="45" fill="#1A1A1A"/>
+    <text x="25" y="64" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#C4A47C">NS Properties</text>
+    <rect x="180" y="48" width="45" height="20" rx="3" fill="#C4A47C"/>
+    <text x="202" y="62" font-family="sans-serif" font-size="9" font-weight="bold" fill="#000000" text-anchor="middle">SEARCH</text>
+
+    <!-- App Content Card 1 -->
+    <rect x="22" y="95" width="206" height="135" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Image Box -->
+    <rect x="28" y="101" width="194" height="75" rx="6" fill="#1E293B"/>
+    <text x="125" y="142" font-family="sans-serif" font-size="10" font-weight="bold" fill="#94A3B8" text-anchor="middle">PRESTIGE HERITAGE VILLA</text>
+    <text x="28" y="193" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A">₹ 4.85 Crore</text>
+    <text x="28" y="210" font-family="sans-serif" font-size="9" fill="#64748B">Whitefield, Bangalore • 4 BHK</text>
+    <rect x="160" y="196" width="55" height="20" rx="3" fill="#059669"/>
+    <text x="187" y="210" font-family="sans-serif" font-size="8" font-weight="bold" fill="#FFFFFF" text-anchor="middle">FREE VISIT</text>
+
+    <!-- App Content Card 2 -->
+    <rect x="22" y="240" width="206" height="130" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <rect x="28" y="246" width="194" height="70" rx="6" fill="#334155"/>
+    <text x="125" y="285" font-family="sans-serif" font-size="10" font-weight="bold" fill="#CBD5E1" text-anchor="middle">SOBHA SIGNATURE SUITES</text>
+    <text x="28" y="335" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A">₹ 1.85 Crore</text>
+    <text x="28" y="352" font-family="sans-serif" font-size="9" fill="#64748B">Sarjapur Road • 3 BHK</text>
+    <rect x="160" y="338" width="55" height="20" rx="3" fill="#C4A47C"/>
+    <text x="187" y="352" font-family="sans-serif" font-size="8" font-weight="bold" fill="#000000" text-anchor="middle">VIEW PLAN</text>
+
+    <!-- Bottom Navigation Bar in Mockup -->
+    <rect x="10" y="380" width="230" height="30" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <circle cx="45" cy="395" r="4" fill="#C4A47C"/>
+    <circle cx="85" cy="395" r="4" fill="#94A3B8"/>
+    <circle cx="125" cy="395" r="4" fill="#94A3B8"/>
+    <circle cx="165" cy="395" r="4" fill="#94A3B8"/>
+    <circle cx="205" cy="395" r="4" fill="#94A3B8"/>
+  </g>
+</svg>

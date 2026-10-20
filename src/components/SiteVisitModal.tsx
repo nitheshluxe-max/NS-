@@ -59,32 +59,32 @@ export const SiteVisitModal: React.FC<SiteVisitModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/75 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 bg-black/75 backdrop-blur-xs overflow-y-auto">
       <div 
         className="relative w-full max-w-lg bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b border-[#1a1a1a]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 border border-[#c4a47c] flex items-center justify-center text-[#c4a47c]">
-              <Calendar className="w-5 h-5" />
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b border-[#1a1a1a] gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 border border-[#c4a47c] flex items-center justify-center text-[#c4a47c] shrink-0">
+              <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div>
-              <h2 className="font-serif-luxury text-xl font-bold">Schedule Property Inspection</h2>
-              <p className="editorial-label text-[#fdfcf9]/70 text-xs normal-case">Private on-site tour escorted by verified portfolio concierge</p>
+            <div className="min-w-0">
+              <h2 className="font-serif-luxury text-lg sm:text-xl font-bold truncate">Schedule Property Inspection</h2>
+              <p className="editorial-label text-[#fdfcf9]/70 text-[10px] sm:text-xs normal-case truncate">Private on-site tour escorted by verified portfolio concierge</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 border border-white/20 hover:border-white text-white cursor-pointer transition-colors"
+            className="p-1.5 border border-white/20 hover:border-white text-white cursor-pointer transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form or Confirmation */}
-        <div className="p-6 overflow-y-auto bg-[#fdfcf9]">
+        <div className="p-4 sm:p-6 overflow-y-auto bg-[#fdfcf9]">
           {isSuccess ? (
             <div className="text-center py-6 space-y-4">
               <div className="w-14 h-14 bg-white border border-[#1a1a1a] text-emerald-600 flex items-center justify-center mx-auto">

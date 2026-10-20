@@ -1,10 +1,10 @@
 {
   "id": "/",
-  "name": "NS Properties | Luxury Real Estate",
+  "name": "NSProperties",
   "short_name": "NSProperties",
   "description": "Comprehensive Indian property search, buying, renting, and listing portal with verified homes, EMI calculator, and site visit scheduling.",
-  "theme_color": "#1a1a1a",
-  "background_color": "#fdfcf9",
+  "theme_color": "#0047E0",
+  "background_color": "#0047E0",
   "display": "standalone",
   "orientation": "portrait-primary",
   "start_url": "/",

@@ -74,9 +74,9 @@ export const CategoryQuickNav: React.FC<CategoryNavProps> = ({
   ];
 
   return (
-    <div className="bg-[#fdfcf9] border-y border-[#1a1a1a] py-4 px-4 sm:px-6 lg:px-8 shadow-xs">
+    <div className="bg-[#fdfcf9] border-y border-[#1a1a1a] py-3 sm:py-4 px-3 sm:px-6 lg:px-8 shadow-xs w-full overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isSelected = activeCategory === cat.id;
@@ -85,27 +85,27 @@ export const CategoryQuickNav: React.FC<CategoryNavProps> = ({
               <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id as any)}
-                className={`p-3.5 sm:p-4 text-left border-2 transition-all cursor-pointer flex items-center justify-between group ${
+                className={`p-2.5 sm:p-4 text-left border-2 transition-all cursor-pointer flex items-center justify-between group w-full overflow-hidden ${
                   isSelected
                     ? 'border-[#1a1a1a] bg-[#1a1a1a] text-[#fdfcf9] shadow-md'
                     : 'border-[#1a1a1a]/20 bg-white hover:border-[#1a1a1a] text-[#1a1a1a]'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center shrink-0 border ${
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shrink-0 border ${
                     isSelected
                       ? 'border-[#c4a47c] bg-[#c4a47c]/20 text-[#c4a47c]'
                       : 'border-[#1a1a1a]/20 bg-[#fdfcf9] text-[#1a1a1a]'
                   }`}>
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <div>
-                    <h3 className={`font-serif-luxury font-bold text-sm sm:text-base leading-tight ${
+                  <div className="min-w-0">
+                    <h3 className={`font-serif-luxury font-bold text-xs sm:text-base leading-tight truncate ${
                       isSelected ? 'text-white' : 'text-[#1a1a1a]'
                     }`}>
                       {cat.label}
                     </h3>
-                    <p className={`font-mono-luxury text-[10px] sm:text-[11px] mt-0.5 ${
+                    <p className={`font-mono-luxury text-[9px] sm:text-[11px] mt-0.5 truncate hidden xs:block ${
                       isSelected ? 'text-white/70' : 'text-[#1a1a1a]/60'
                     }`}>
                       {cat.sublabel}
@@ -113,8 +113,8 @@ export const CategoryQuickNav: React.FC<CategoryNavProps> = ({
                   </div>
                 </div>
 
-                <div className="text-right pl-2">
-                  <span className={`inline-block font-mono-luxury text-[10px] sm:text-xs font-bold px-2 py-0.5 ${
+                <div className="text-right pl-1 sm:pl-2 shrink-0">
+                  <span className={`inline-block font-mono-luxury text-[9px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 ${
                     isSelected
                       ? 'bg-[#c4a47c] text-black'
                       : 'bg-[#1a1a1a]/5 text-[#1a1a1a]'
@@ -312,9 +312,9 @@ export const PropertiesByLocation: React.FC<PropertiesByLocationProps> = ({
   ];
 
   return (
-    <section className="py-8 bg-[#fdfcf9] border-b border-[#1a1a1a]/15">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+    <section className="py-6 sm:py-8 bg-[#fdfcf9] border-b border-[#1a1a1a]/15 w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-4 sm:mb-6">
           <div>
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-[#c4a47c]" />
@@ -330,12 +330,12 @@ export const PropertiesByLocation: React.FC<PropertiesByLocationProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
             {['Bengaluru', 'Mumbai', 'Delhi NCR', 'Hyderabad', 'Pune'].map((c) => (
               <button
                 key={c}
                 onClick={() => onSelectCity(c)}
-                className={`px-3 py-1 font-mono-luxury text-xs uppercase font-bold border transition-colors cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 font-mono-luxury text-xs uppercase font-bold border transition-colors cursor-pointer ${
                   currentCity === c
                     ? 'bg-[#1a1a1a] text-white border-[#1a1a1a]'
                     : 'bg-white text-[#1a1a1a]/70 border-[#1a1a1a]/20 hover:border-black'
@@ -347,7 +347,7 @@ export const PropertiesByLocation: React.FC<PropertiesByLocationProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {primeLocalities.map((item) => (
             <div
               key={`${item.city}-${item.locality}`}
@@ -438,9 +438,9 @@ export const PropertiesByBudget: React.FC<PropertiesByBudgetProps> = ({
   ];
 
   return (
-    <section className="py-8 bg-white border-b border-[#1a1a1a]/15">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
+    <section className="py-6 sm:py-8 bg-white border-b border-[#1a1a1a]/15 w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="mb-4 sm:mb-6">
           <div className="flex items-center gap-2">
             <IndianRupee className="w-4 h-4 text-[#c4a47c]" />
             <span className="font-mono-luxury text-xs text-[#c4a47c] font-bold uppercase tracking-wider">
@@ -455,7 +455,7 @@ export const PropertiesByBudget: React.FC<PropertiesByBudgetProps> = ({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {budgetTiers.map((tier) => {
             const isSelected = activeBudgetLabel === tier.label;
 
@@ -463,7 +463,7 @@ export const PropertiesByBudget: React.FC<PropertiesByBudgetProps> = ({
               <div
                 key={tier.id}
                 onClick={() => onSelectBudget(tier.min, tier.max, tier.label)}
-                className={`p-4 border-2 transition-all cursor-pointer flex flex-col justify-between group ${
+                className={`p-3.5 sm:p-4 border-2 transition-all cursor-pointer flex flex-col justify-between group ${
                   isSelected
                     ? 'border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg'
                     : 'border-[#1a1a1a]/20 bg-[#fdfcf9] hover:border-[#1a1a1a] text-[#1a1a1a]'
@@ -481,7 +481,7 @@ export const PropertiesByBudget: React.FC<PropertiesByBudgetProps> = ({
                     <IndianRupee className={`w-4 h-4 ${isSelected ? 'text-[#c4a47c]' : 'text-gray-400'}`} />
                   </div>
 
-                  <h3 className={`font-serif-luxury text-lg font-bold ${
+                  <h3 className={`font-serif-luxury text-base sm:text-lg font-bold ${
                     isSelected ? 'text-white' : 'text-[#1a1a1a]'
                   }`}>
                     {tier.label}
@@ -494,7 +494,7 @@ export const PropertiesByBudget: React.FC<PropertiesByBudgetProps> = ({
                   </p>
                 </div>
 
-                <div className={`mt-4 pt-3 border-t flex items-center justify-between text-xs font-mono-luxury ${
+                <div className={`mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t flex items-center justify-between text-xs font-mono-luxury ${
                   isSelected ? 'border-white/20' : 'border-[#1a1a1a]/15'
                 }`}>
                   <span className={isSelected ? 'text-[#c4a47c] font-bold' : 'text-[#1a1a1a]/70'}>
@@ -529,15 +529,15 @@ export const ContactNSPropertiesBanner: React.FC<ContactBannerProps> = ({
   };
 
   return (
-    <section className="bg-[#1a1a1a] text-[#fdfcf9] py-8 sm:py-10 border-y-2 border-[#c4a47c]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center lg:text-left">
+    <section className="bg-[#1a1a1a] text-[#fdfcf9] py-6 sm:py-10 border-y-2 border-[#c4a47c] w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-6">
+          <div className="space-y-2 text-center lg:text-left w-full">
             <div className="inline-flex items-center gap-2 bg-[#c4a47c]/20 border border-[#c4a47c]/40 px-2.5 py-0.5 font-mono-luxury text-xs text-[#c4a47c] font-bold uppercase">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Contact NS Properties</span>
             </div>
-            <h2 className="font-serif-luxury text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            <h2 className="font-serif-luxury text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-white">
               Looking for Your Dream Property or Planning to Sell?
             </h2>
             <p className="font-mono-luxury text-xs text-white/70 max-w-2xl leading-relaxed">
@@ -545,20 +545,20 @@ export const ContactNSPropertiesBanner: React.FC<ContactBannerProps> = ({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 font-mono-luxury text-xs">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 font-mono-luxury text-xs w-full sm:w-auto shrink-0">
             <button
               onClick={onOpenContactModal}
-              className="px-5 py-3 bg-[#c4a47c] hover:bg-[#b09066] text-black font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-md"
+              className="px-4 sm:px-5 py-2.5 sm:py-3 bg-[#c4a47c] hover:bg-[#b09066] text-black font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-md text-center"
             >
-              <Phone className="w-4 h-4 text-black" />
+              <Phone className="w-4 h-4 text-black shrink-0" />
               <span>Contact NS Properties</span>
             </button>
 
             <button
               onClick={handleDirectWhatsApp}
-              className="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-md"
+              className="px-4 sm:px-5 py-2.5 sm:py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-md text-center"
             >
-              <MessageSquare className="w-4 h-4 text-white" />
+              <MessageSquare className="w-4 h-4 text-white shrink-0" />
               <span>Chat on WhatsApp</span>
             </button>
           </div>

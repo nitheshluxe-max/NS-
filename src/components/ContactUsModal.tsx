@@ -73,29 +73,29 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-xs overflow-y-auto">
       <div 
         className="relative w-full max-w-2xl bg-[#fdfcf9] border-2 border-[#1a1a1a] shadow-2xl overflow-hidden my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b-2 border-[#c4a47c]">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#c4a47c] text-black font-mono-luxury font-black flex items-center justify-center text-xs">
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b-2 border-[#c4a47c] gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#c4a47c] text-black font-mono-luxury font-black flex items-center justify-center text-xs shrink-0">
               NS
             </div>
             <div>
-              <h2 className="font-serif-luxury text-xl font-bold tracking-tight text-white">
+              <h2 className="font-serif-luxury text-lg sm:text-xl font-bold tracking-tight text-white">
                 Contact NS Properties
               </h2>
-              <p className="font-mono-luxury text-[11px] text-[#c4a47c] uppercase tracking-wider">
+              <p className="font-mono-luxury text-[10px] sm:text-[11px] text-[#c4a47c] uppercase tracking-wider">
                 Direct Line • Real Estate Advisors • Office Network
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -129,7 +129,7 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({
             </div>
           </div>
         ) : (
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Quick Contact Buttons Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono-luxury text-xs">
               <button

@@ -37,6 +37,7 @@ import { Property, VisitorLead, Offer, OfferEnquiry } from '../types';
 import { AppUserSession, saveActiveSession } from '../utils/appAuthService';
 import { DEFAULT_CONTACT_PHONE, DISPLAY_CONTACT_PHONE, openWhatsAppChat } from '../utils/whatsapp';
 import { generateProjectBrochurePdf } from '../utils/brochurePdfGenerator';
+import { AppProfileLogo } from './AppProfileLogo';
 
 export interface UserAccountHubModalProps {
   isOpen: boolean;
@@ -323,23 +324,23 @@ export const UserAccountHubModal: React.FC<UserAccountHubModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b-2 border-[#c4a47c]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#c4a47c] text-black font-black flex items-center justify-center text-sm shadow-md font-serif-luxury">
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b-2 border-[#c4a47c] gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#c4a47c] text-black font-black flex items-center justify-center text-sm shadow-md font-serif-luxury shrink-0">
               {profileName.charAt(0).toUpperCase()}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-serif-luxury text-xl font-bold tracking-tight text-white">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <h3 className="font-serif-luxury text-lg sm:text-xl font-bold tracking-tight text-white truncate">
                   {profileName}
                 </h3>
-                <span className="bg-[#c4a47c] text-black text-[9px] font-black px-2 py-0.5 uppercase tracking-wider">
+                <span className="bg-[#c4a47c] text-black text-[9px] font-black px-1.5 sm:px-2 py-0.5 uppercase tracking-wider shrink-0">
                   {profileRole.toUpperCase()} • VERIFIED
                 </span>
               </div>
-              <p className="text-[11px] text-white/70 flex items-center gap-2 mt-0.5">
+              <p className="text-[10px] sm:text-[11px] text-white/70 flex flex-wrap items-center gap-1 sm:gap-2 mt-0.5 truncate">
                 <span>{profileEmail}</span>
-                <span>•</span>
+                <span className="hidden xs:inline">•</span>
                 <span>{profilePhone}</span>
               </p>
             </div>
@@ -1027,6 +1028,24 @@ export const UserAccountHubModal: React.FC<UserAccountHubModalProps> = ({
           {activeTab === 'profile' && (
             <form onSubmit={handleSaveProfile} className="max-w-2xl mx-auto space-y-4">
               <div className="bg-white border border-[#1a1a1a]/20 p-5 shadow-xs">
+                {/* Official App Profile Identity Card */}
+                <div className="flex items-center gap-3.5 p-3.5 bg-[#0a1329] text-white border-l-4 border-blue-500 mb-4 shadow-xs">
+                  <AppProfileLogo size="lg" showGlow={true} className="w-14 h-14 shrink-0 rounded-lg" />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-serif-luxury font-bold text-sm text-white">
+                        NS Properties Official Architectural Identity
+                      </span>
+                      <span className="bg-blue-600 text-[9px] font-bold px-1.5 py-0.5 uppercase tracking-wider text-white">
+                        4 BHK Luxe Edition
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-white/70 font-mono-luxury mt-0.5">
+                      Flagship isometric architectural estate masterplan representing luxury real estate excellence across India.
+                    </p>
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#1a1a1a]/15">
                   <User className="w-4 h-4 text-[#005CA8]" />
                   <h4 className="font-serif-luxury font-bold text-sm text-[#1a1a1a] uppercase tracking-wider">

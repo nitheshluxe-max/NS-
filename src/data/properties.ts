@@ -1,4 +1,4 @@
-import { Property, LocalityTrend } from '../types';
+import { Property, LocalityTrend } from '../types.ts';
 
 export const INITIAL_PROPERTIES: Property[] = [
   {

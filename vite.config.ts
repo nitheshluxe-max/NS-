@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { devBackendMiddleware } from './src/server/devBackendApi';
+import { devBackendMiddleware } from './src/server/devBackendApi.ts';
 
 export default defineConfig(() => {
   return {
@@ -21,11 +21,11 @@ export default defineConfig(() => {
         includeAssets: ['icon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
         manifest: {
           id: '/',
-          name: 'NS Properties | Luxury Real Estate',
+          name: 'NSProperties',
           short_name: 'NSProperties',
           description: 'Comprehensive Indian property search, buying, renting, and listing portal by NS Properties.',
-          theme_color: '#1a1a1a',
-          background_color: '#fdfcf9',
+          theme_color: '#0047E0',
+          background_color: '#0047E0',
           display: 'standalone',
           start_url: '/',
           scope: '/',
@@ -60,7 +60,7 @@ export default defineConfig(() => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(import.meta.dirname, '.'),
       },
     },
     server: {

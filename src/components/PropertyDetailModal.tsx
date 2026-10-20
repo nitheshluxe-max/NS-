@@ -162,61 +162,61 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar */}
-        <div className="sticky top-0 z-20 bg-[#fdfcf9] border-b-[1.5px] border-[#1a1a1a] px-4 sm:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="editorial-badge bg-[#1a1a1a] text-[#fdfcf9] border-[#1a1a1a]">
+        <div className="sticky top-0 z-20 bg-[#fdfcf9] border-b-[1.5px] border-[#1a1a1a] px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span className="editorial-badge bg-[#1a1a1a] text-[#fdfcf9] border-[#1a1a1a] text-[10px] sm:text-xs">
               {property.purpose === 'buy' ? 'For Sale' : 'For Rent'}
             </span>
-            <span className="editorial-label text-[#1a1a1a]/60 text-[10px]">
+            <span className="editorial-label text-[#1a1a1a]/60 text-[9px] sm:text-[10px] truncate">
               ID: {property.id}
             </span>
             {property.isVerified && (
-              <span className="hidden sm:inline-flex editorial-badge bg-[#e2f4ea] text-[#1e4620] border-0">
+              <span className="hidden sm:inline-flex editorial-badge bg-[#e2f4ea] text-[#1e4620] border-0 text-[10px]">
                 Verified Listing
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             {/* Shortlist button */}
             <button
               onClick={() => onToggleSave(property)}
-              className={`p-2 border border-[#1a1a1a] transition-colors cursor-pointer ${
+              className={`p-1.5 sm:p-2 border border-[#1a1a1a] transition-colors cursor-pointer ${
                 isSaved ? 'bg-red-50 text-red-600' : 'bg-[#fdfcf9] hover:bg-[#1a1a1a]/5 text-[#1a1a1a]'
               }`}
               title={isSaved ? 'Shortlisted' : 'Shortlist'}
             >
-              <Heart className={`w-4 h-4 ${isSaved ? 'fill-red-600 text-red-600' : ''}`} />
+              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSaved ? 'fill-red-600 text-red-600' : ''}`} />
             </button>
 
             {/* Compare */}
             <button
               onClick={() => onToggleCompare(property)}
-              className={`p-2 border border-[#1a1a1a] transition-colors cursor-pointer ${
+              className={`p-1.5 sm:p-2 border border-[#1a1a1a] transition-colors cursor-pointer ${
                 isCompared ? 'bg-[#1a1a1a] text-[#fdfcf9]' : 'bg-[#fdfcf9] hover:bg-[#1a1a1a]/5 text-[#1a1a1a]'
               }`}
               title="Compare"
             >
-              <Scale className="w-4 h-4" />
+              <Scale className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
 
             {/* Download Official Project Brochure */}
             <button
               onClick={() => onOpenBrochure ? onOpenBrochure(property) : generateProjectBrochurePdf(property)}
-              className="px-3 py-1.5 bg-[#c4a47c] hover:bg-[#b09066] text-black font-mono-luxury font-bold text-xs uppercase flex items-center gap-1.5 cursor-pointer border border-black shadow-xs"
+              className="px-2 sm:px-3 py-1.5 bg-[#c4a47c] hover:bg-[#b09066] text-black font-mono-luxury font-bold text-[10px] sm:text-xs uppercase flex items-center gap-1 sm:gap-1.5 cursor-pointer border border-black shadow-xs"
               title="Download Official Project Brochure (PDF)"
             >
-              <Download className="w-3.5 h-3.5 text-black" />
-              <span>Brochure</span>
+              <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black" />
+              <span className="hidden xs:inline">Brochure</span>
             </button>
 
             {/* Share */}
             <button
               onClick={handleShare}
-              className="p-2 border border-[#1a1a1a] bg-[#fdfcf9] hover:bg-[#1a1a1a]/5 text-[#1a1a1a] transition-colors cursor-pointer relative"
+              className="p-1.5 sm:p-2 border border-[#1a1a1a] bg-[#fdfcf9] hover:bg-[#1a1a1a]/5 text-[#1a1a1a] transition-colors cursor-pointer relative"
               title="Copy Link"
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {copiedLink && (
                 <span className="absolute -bottom-7 right-0 font-mono-luxury text-[10px] bg-[#1a1a1a] text-[#fdfcf9] px-2 py-0.5 whitespace-nowrap">
                   Link Copied!
@@ -227,9 +227,9 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             {/* Close */}
             <button
               onClick={onClose}
-              className="p-2 border border-[#1a1a1a] hover:bg-[#1a1a1a] text-[#1a1a1a] hover:text-[#fdfcf9] transition-colors cursor-pointer ml-1"
+              className="p-1.5 sm:p-2 border border-[#1a1a1a] hover:bg-[#1a1a1a] text-[#1a1a1a] hover:text-[#fdfcf9] transition-colors cursor-pointer ml-0.5 sm:ml-1"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>

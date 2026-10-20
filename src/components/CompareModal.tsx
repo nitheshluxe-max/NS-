@@ -49,20 +49,20 @@ export const CompareModal: React.FC<CompareModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 bg-black/70 backdrop-blur-xs overflow-y-auto">
       <div 
         className="relative w-full max-w-5xl bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b border-[#1a1a1a]">
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b border-[#1a1a1a] gap-2">
           <div>
-            <h2 className="font-serif-luxury text-xl sm:text-2xl font-bold">Side-by-Side Property Comparison</h2>
-            <p className="font-mono-luxury text-xs text-[#c4a47c]">Comparing {properties.length} selected properties</p>
+            <h2 className="font-serif-luxury text-lg sm:text-2xl font-bold">Side-by-Side Property Comparison</h2>
+            <p className="font-mono-luxury text-[11px] sm:text-xs text-[#c4a47c]">Comparing {properties.length} selected properties</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 border border-[#fdfcf9]/30 hover:border-white text-white cursor-pointer transition-colors"
+            className="p-1.5 border border-[#fdfcf9]/30 hover:border-white text-white cursor-pointer transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>

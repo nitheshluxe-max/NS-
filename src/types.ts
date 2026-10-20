@@ -13,6 +13,7 @@ export type PropertyType =
 export type PostedBy = 'Owner' | 'Builder' | 'Certified Agent';
 export type FurnishingStatus = 'Furnished' | 'Semi-Furnished' | 'Unfurnished';
 export type PossessionStatus = 'Ready to Move' | 'Within 3 Months' | 'Under Construction (2026)' | 'Under Construction (2027)';
+export type PropertyPublishStatus = 'published' | 'draft' | 'inactive' | 'deleted';
 
 export interface Landmark {
   name: string;
@@ -43,6 +44,9 @@ export interface Property {
   facing?: string; // e.g., "East", "North-East"
   furnishing: FurnishingStatus;
   possession: PossessionStatus;
+  status?: PropertyPublishStatus;
+  createdAt?: string;
+  updatedAt?: string;
   ageOfProperty?: string;
   reraId?: string;
   isVerified: boolean;

@@ -64,29 +64,29 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
   const currentBudgetOptions = purpose === 'rent' ? budgetOptionsRent : budgetOptionsBuy;
 
   return (
-    <section className="bg-[#fdfcf9] border-b-[1.5px] border-[#1a1a1a] px-4 sm:px-8 py-10 lg:py-14">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+    <section className="bg-[#fdfcf9] border-b-[1.5px] border-[#1a1a1a] px-3 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-14 w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start">
         {/* Left Column: Editorial Headline */}
         <div className="lg:col-span-7 flex flex-col justify-center">
           <span className="editorial-label text-[#1a1a1a]/60 mb-2">
             The Curated Collection
           </span>
-          <h1 className="font-serif-luxury text-4xl sm:text-5xl lg:text-6xl text-[#1a1a1a] font-normal leading-[0.95] tracking-tight mb-4">
+          <h1 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#1a1a1a] font-normal leading-[1.05] sm:leading-[0.95] tracking-tight mb-3 sm:mb-4">
             Find Your Dream Home <br />
             <span className="italic font-light">on NS Properties</span>
           </h1>
-          <p className="text-sm sm:text-base text-[#1a1a1a]/70 font-light max-w-xl leading-relaxed mb-6">
+          <p className="text-xs sm:text-base text-[#1a1a1a]/70 font-light max-w-xl leading-relaxed mb-4 sm:mb-6">
             Browse verified flats, luxury villas, gated plots, and commercial spaces with direct owner & builder contacts across India.
           </p>
 
           {/* Purpose & Category selector */}
-          <div className="flex flex-wrap gap-2 pt-2 border-t border-[#1a1a1a]/10">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 pt-2 border-t border-[#1a1a1a]/10">
             <button
               onClick={() => {
                 onSelectPurpose('buy');
                 onSelectCategory('residential');
               }}
-              className={`editorial-label px-3.5 py-1.5 transition-all cursor-pointer ${
+              className={`editorial-label px-3 sm:px-3.5 py-2 sm:py-1.5 text-center transition-all cursor-pointer flex items-center justify-center ${
                 purpose === 'buy' && category === 'residential'
                   ? 'bg-[#1a1a1a] text-[#fdfcf9] font-bold'
                   : 'bg-transparent text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/20'
@@ -99,7 +99,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 onSelectPurpose('rent');
                 onSelectCategory('residential');
               }}
-              className={`editorial-label px-3.5 py-1.5 transition-all cursor-pointer ${
+              className={`editorial-label px-3 sm:px-3.5 py-2 sm:py-1.5 text-center transition-all cursor-pointer flex items-center justify-center ${
                 purpose === 'rent' && category === 'residential'
                   ? 'bg-[#1a1a1a] text-[#fdfcf9] font-bold'
                   : 'bg-transparent text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/20'
@@ -109,7 +109,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </button>
             <button
               onClick={() => onSelectCategory('commercial')}
-              className={`editorial-label px-3.5 py-1.5 transition-all cursor-pointer ${
+              className={`editorial-label px-3 sm:px-3.5 py-2 sm:py-1.5 text-center transition-all cursor-pointer flex items-center justify-center ${
                 category === 'commercial'
                   ? 'bg-[#1a1a1a] text-[#fdfcf9] font-bold'
                   : 'bg-transparent text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/20'
@@ -122,7 +122,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 onSelectCategory('plots');
                 onSelectPurpose('buy');
               }}
-              className={`editorial-label px-3.5 py-1.5 transition-all cursor-pointer ${
+              className={`editorial-label px-3 sm:px-3.5 py-2 sm:py-1.5 text-center transition-all cursor-pointer flex items-center justify-center ${
                 category === 'plots'
                   ? 'bg-[#1a1a1a] text-[#fdfcf9] font-bold'
                   : 'bg-transparent text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/20'
@@ -133,7 +133,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           </div>
 
           {/* Quick suggestions */}
-          <div className="mt-5 flex flex-wrap items-center gap-1.5">
+          <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-1.5">
             <span className="editorial-label text-[#1a1a1a]/50 text-[10px]">Curated:</span>
             {popularTags.map((tag, idx) => (
               <button
@@ -148,7 +148,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
         </div>
 
         {/* Right Column: Variation 2 Styled Search Box */}
-        <div className="lg:col-span-5 bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] p-5 sm:p-6 shadow-xs">
+        <div className="lg:col-span-5 bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] p-4 sm:p-6 shadow-xs w-full">
           <div className="space-y-4">
             {/* Search query */}
             <div className="border-b border-[#1a1a1a]/20 pb-2">
@@ -156,7 +156,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 Search Locality or Project
               </span>
               <div className="flex items-center gap-2">
-                <Search className="w-4 h-4 text-[#1a1a1a]/40" />
+                <Search className="w-4 h-4 text-[#1a1a1a]/40 shrink-0" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -168,7 +168,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </div>
 
             {/* Type & Budget grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="border-b border-[#1a1a1a]/20 pb-2">
                 <span className="editorial-label text-[#1a1a1a]/60 block mb-1">
                   Type
@@ -211,7 +211,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <span className="editorial-label text-[#1a1a1a]/60 block mb-2">
                   Select BHK
                 </span>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {[1, 2, 3, 4, 5].map((bhk) => {
                     const isSelected = selectedBhk.includes(bhk);
                     return (
@@ -219,7 +219,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                         key={bhk}
                         type="button"
                         onClick={() => onToggleBhk(bhk)}
-                        className={`editorial-badge cursor-pointer transition-all ${
+                        className={`editorial-badge cursor-pointer transition-all flex-1 min-w-[50px] sm:flex-initial py-2 px-2.5 sm:px-3 text-center flex items-center justify-center font-bold text-xs ${
                           isSelected
                             ? 'bg-[#1a1a1a] text-[#fdfcf9] font-bold border-[#1a1a1a]'
                             : 'bg-transparent text-[#1a1a1a] border-[#1a1a1a]/30 hover:border-[#1a1a1a]'
@@ -236,7 +236,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             {/* Search Submit Button */}
             <button
               onClick={onSearchSubmit}
-              className="w-full mt-2 py-3 px-4 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] font-mono-luxury uppercase text-xs font-bold tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 border border-[#1a1a1a]"
+              className="w-full mt-2 py-3 px-4 min-h-[44px] bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] font-mono-luxury uppercase text-xs font-bold tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 border border-[#1a1a1a] shadow-sm"
             >
               <span>Search Properties</span>
               <span className="text-[#c4a47c] font-mono">({totalResultsCount})</span>

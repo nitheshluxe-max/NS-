@@ -31,7 +31,8 @@ import {
   Radio,
   ExternalLink,
   ChevronRight,
-  Crown
+  Crown,
+  Laptop
 } from 'lucide-react';
 import { 
   DevSystemVitals, 
@@ -78,6 +79,7 @@ export interface DeveloperDashboardProps {
   onUpdateBugTicketStatus: (id: string, status: BugTicket['status'], fixNote?: string) => void;
   onOpenOwnerConsole?: () => void;
   onMaintenanceModeChange?: (active: boolean, config?: MaintenanceConfig) => void;
+  onOpenPlayStorePublish?: () => void;
 }
 
 export type DeveloperTab = 
@@ -98,7 +100,8 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
   bugTickets,
   onUpdateBugTicketStatus,
   onOpenOwnerConsole,
-  onMaintenanceModeChange
+  onMaintenanceModeChange,
+  onOpenPlayStorePublish
 }) => {
   // -------------------------------------------------------------
   // AUTHENTICATION STATE
@@ -1062,6 +1065,30 @@ export const DeveloperDashboard: React.FC<DeveloperDashboardProps> = ({
           {/* ========================================================= */}
           {activeTab === 'versions' && (
             <div className="space-y-6">
+              {/* Google Play Store & Android App Bundle Banner */}
+              <div className="p-4 bg-[#0a1428] border border-cyan-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <Laptop className="w-6 h-6 text-cyan-400 shrink-0" />
+                  <div>
+                    <h5 className="font-bold text-xs uppercase text-cyan-200 tracking-wider">
+                      Google Play Store &bull; Android App Bundle (.AAB) Release Hub
+                    </h5>
+                    <p className="text-[11px] text-slate-300 mt-0.5 font-sans">
+                      Target SDK 34, Trusted Web Activity (TWA), and verified Digital Asset Links (.well-known/assetlinks.json).
+                    </p>
+                  </div>
+                </div>
+                {onOpenPlayStorePublish && (
+                  <button
+                    type="button"
+                    onClick={onOpenPlayStorePublish}
+                    className="px-3.5 py-1.5 bg-cyan-400 hover:bg-cyan-300 text-black text-xs font-bold uppercase transition-colors cursor-pointer shrink-0"
+                  >
+                    Open Play Store Console &rarr;
+                  </button>
+                )}
+              </div>
+
               {/* Active Version Status */}
               <div className="border border-slate-800 bg-[#020617] p-5 flex flex-wrap items-center justify-between gap-4">
                 <div>

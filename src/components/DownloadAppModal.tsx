@@ -23,22 +23,31 @@ import {
 } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { downloadProjectZip } from '../utils/projectDownloader';
+import { generatePlayStoreProjectZip, downloadListingMetadataTextFile } from '../utils/playstoreProjectGenerator';
 import { openWhatsAppShare } from '../utils/whatsapp';
 import { getPublicShareUrl } from '../utils/shareUrl';
 
 interface DownloadAppModalProps {
   onClose: () => void;
   onOpenShare?: () => void;
+  onOpenPlayStorePublish?: () => void;
+  initialTab?: 'install' | 'code' | 'share' | 'playstore';
 }
 
-export const DownloadAppModal: React.FC<DownloadAppModalProps> = ({ onClose, onOpenShare }) => {
+export const DownloadAppModal: React.FC<DownloadAppModalProps> = ({ 
+  onClose, 
+  onOpenShare,
+  onOpenPlayStorePublish,
+  initialTab = 'code'
+}) => {
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
-  const [activeTab, setActiveTab] = useState<'install' | 'code' | 'share' | 'playstore'>('code');
+  const [activeTab, setActiveTab] = useState<'install' | 'code' | 'share' | 'playstore'>(initialTab);
   const [copied, setCopied] = useState(false);
   const [installedSuccess, setInstalledSuccess] = useState(false);
   const [isZipping, setIsZipping] = useState(false);
   const [zipProgress, setZipProgress] = useState(0);
   const [showQR, setShowQR] = useState(false);
+  const [isPackagingPlayStore, setIsPackagingPlayStore] = useState(false);
 
   const publicShareUrl = getPublicShareUrl();
 
@@ -540,26 +549,71 @@ export const DownloadAppModal: React.FC<DownloadAppModalProps> = ({ onClose, onO
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-2 pt-1 font-mono-luxury">
-                <a
-                  href={`https://www.pwabuilder.com?url=${encodeURIComponent(publicShareUrl)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-2.5 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] uppercase font-bold text-xs border border-[#1a1a1a] transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
-                >
-                  <Laptop className="w-3.5 h-3.5 text-[#c4a47c]" />
-                  <span>1-Click Package on PWABuilder</span>
-                  <ExternalLink className="w-3 h-3 text-[#c4a47c]" />
-                </a>
-                <a
-                  href="https://play.google.com/console"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-2.5 bg-white hover:bg-slate-100 text-[#1a1a1a] uppercase font-bold text-xs border border-[#1a1a1a] transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
-                >
-                  <span>Open Google Play Console</span>
-                  <ExternalLink className="w-3 h-3 text-[#1a1a1a]" />
-                </a>
+              <div className="space-y-2 pt-1 font-mono-luxury">
+                {onOpenPlayStorePublish && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenPlayStorePublish();
+                    }}
+                    className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white uppercase font-bold text-xs border border-emerald-900 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  >
+                    <Laptop className="w-4 h-4 text-[#c4a47c]" />
+                    <span>Launch Google Play Store Publishing Console &amp; .AAB Hub</span>
+                    <Sparkles className="w-3.5 h-3.5 text-[#c4a47c]" />
+                  </button>
+                )}
+
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        setIsPackagingPlayStore(true);
+                        await generatePlayStoreProjectZip();
+                        setIsPackagingPlayStore(false);
+                      } catch (e) {
+                        console.error(e);
+                        setIsPackagingPlayStore(false);
+                      }
+                    }}
+                    disabled={isPackagingPlayStore}
+                    className="flex-1 py-2.5 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] uppercase font-bold text-xs border border-[#1a1a1a] transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                  >
+                    {isPackagingPlayStore ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-[#c4a47c]" />
+                        <span>Packaging Project...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-3.5 h-3.5 text-[#c4a47c]" />
+                        <span>Download Android Studio ZIP</span>
+                      </>
+                    )}
+                  </button>
+
+                  <a
+                    href={`https://www.pwabuilder.com?url=${encodeURIComponent(publicShareUrl)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 py-2.5 bg-white hover:bg-slate-100 text-[#1a1a1a] uppercase font-bold text-xs border border-[#1a1a1a] transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-[#c4a47c]" />
+                    <span>1-Click PWABuilder</span>
+                  </a>
+
+                  <a
+                    href="https://play.google.com/console"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 py-2.5 bg-white hover:bg-slate-100 text-[#1a1a1a] uppercase font-bold text-xs border border-[#1a1a1a] transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                  >
+                    <span>Play Console</span>
+                    <ExternalLink className="w-3 h-3 text-[#1a1a1a]" />
+                  </a>
+                </div>
               </div>
             </div>
           )}

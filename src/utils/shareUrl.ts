@@ -15,10 +15,46 @@
 
 // Public shared preview URL for this project
 export const PUBLIC_SHARED_APP_URL = 'https://ais-pre-iwndiyzigsglaztxgszw2g-775754830492.asia-southeast1.run.app';
+export const CLOUD_RUN_SERVICE_NAME = 'iwndiyzigsglaztxgszw2g';
+export const CLOUD_RUN_REGION = 'asia-southeast1';
+export const CLOUD_RUN_PROJECT_ID = '775754830492';
+
+export const CUSTOM_DOMAIN_STORAGE_KEY = 'NS_CUSTOM_DOMAIN';
+export const OFFICIAL_CUSTOM_DOMAIN = 'nsproperties4.com';
+export const OFFICIAL_CUSTOM_DOMAIN_URL = 'https://nsproperties4.com';
+
+export function getCustomDomain(): string {
+  if (typeof window === 'undefined') return OFFICIAL_CUSTOM_DOMAIN;
+  try {
+    return localStorage.getItem(CUSTOM_DOMAIN_STORAGE_KEY) || OFFICIAL_CUSTOM_DOMAIN;
+  } catch {
+    return OFFICIAL_CUSTOM_DOMAIN;
+  }
+}
+
+export function setCustomDomain(domain: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const clean = domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+    if (clean) {
+      localStorage.setItem(CUSTOM_DOMAIN_STORAGE_KEY, clean);
+    } else {
+      localStorage.removeItem(CUSTOM_DOMAIN_STORAGE_KEY);
+    }
+  } catch (e) {
+    console.error('Failed to save custom domain', e);
+  }
+}
 
 export function getPublicShareUrl(): string {
   if (typeof window === 'undefined') {
     return PUBLIC_SHARED_APP_URL;
+  }
+
+  // 1. Check if user configured a BigRock / custom domain
+  const custom = getCustomDomain();
+  if (custom) {
+    return `https://${custom}`;
   }
 
   const origin = window.location.origin;

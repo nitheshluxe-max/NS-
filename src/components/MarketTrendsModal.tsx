@@ -8,32 +8,32 @@ interface MarketTrendsModalProps {
 
 export const MarketTrendsModal: React.FC<MarketTrendsModalProps> = ({ onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/75 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 bg-black/75 backdrop-blur-xs overflow-y-auto">
       <div 
         className="relative w-full max-w-4xl bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b border-[#1a1a1a]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 border border-[#c4a47c] flex items-center justify-center text-[#c4a47c]">
-              <TrendingUp className="w-5 h-5" />
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b border-[#1a1a1a] gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 border border-[#c4a47c] flex items-center justify-center text-[#c4a47c] shrink-0">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div>
-              <h2 className="font-serif-luxury text-xl font-bold">Market Intelligence & Capital Appreciation</h2>
-              <p className="editorial-label text-[#fdfcf9]/70 text-xs normal-case">Micro-market capital yield, rental index & infrastructure benchmarks</p>
+            <div className="min-w-0">
+              <h2 className="font-serif-luxury text-base sm:text-xl font-bold truncate">Market Intelligence & Capital Appreciation</h2>
+              <p className="editorial-label text-[#fdfcf9]/70 text-[10px] sm:text-xs normal-case truncate">Micro-market capital yield, rental index & infrastructure benchmarks</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 border border-white/20 hover:border-white text-white cursor-pointer transition-colors"
+            className="p-1.5 border border-white/20 hover:border-white text-white cursor-pointer transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-6 space-y-4 bg-[#fdfcf9]">
+        <div className="overflow-y-auto p-4 sm:p-6 space-y-4 bg-[#fdfcf9]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {LOCALITY_TRENDS.map((trend, idx) => (
               <div 

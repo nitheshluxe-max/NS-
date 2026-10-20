@@ -47,10 +47,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
   return (
     <article 
-      className="bg-[#fdfcf9] border border-[#1a1a1a]/15 hover:border-[#1a1a1a] transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row gap-5 group"
+      className="bg-[#fdfcf9] border border-[#1a1a1a]/15 hover:border-[#1a1a1a] transition-all duration-200 p-3.5 sm:p-5 flex flex-col md:flex-row gap-4 sm:gap-5 group w-full max-w-full overflow-hidden"
     >
-      {/* Image Gallery Column - 450px ratio in variation */}
-      <div className="relative md:w-[380px] lg:w-[420px] aspect-4/3 shrink-0 bg-[#1a1a1a] overflow-hidden select-none">
+      {/* Image Gallery Column */}
+      <div className="relative w-full md:w-[360px] lg:w-[400px] aspect-16/10 sm:aspect-4/3 shrink-0 bg-[#1a1a1a] overflow-hidden select-none">
         <img
           src={property.images[currentImgIndex]}
           alt={property.title}
@@ -129,23 +129,23 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       </div>
 
       {/* Property Details Column */}
-      <div className="flex-1 flex flex-col justify-between">
+      <div className="flex-1 min-w-0 flex flex-col justify-between w-full">
         <div>
           {/* Price header & Price per sq.ft */}
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <span className="font-mono-luxury text-2xl sm:text-3xl font-bold text-[#1a1a1a]">
               {property.priceDisplay}
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {property.pricePerSqFt > 0 && (
-                <span className="editorial-label text-[#1a1a1a]/60">
+                <span className="editorial-label text-[#1a1a1a]/60 text-[11px] sm:text-xs">
                   ₹{property.pricePerSqFt.toLocaleString('en-IN')}/sq.ft
                 </span>
               )}
               {/* Compare toggle */}
               <label 
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1 editorial-label text-[#1a1a1a]/70 hover:text-[#1a1a1a] cursor-pointer"
+                className="flex items-center gap-1 editorial-label text-[#1a1a1a]/70 hover:text-[#1a1a1a] cursor-pointer text-[11px] sm:text-xs"
               >
                 <input
                   type="checkbox"
@@ -161,36 +161,36 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           {/* Title */}
           <h3 
             onClick={() => onSelectProperty(property)}
-            className="font-serif-luxury text-xl sm:text-2xl text-[#1a1a1a] font-bold hover:text-[#c4a47c] cursor-pointer transition-colors mt-1.5 line-clamp-1"
+            className="font-serif-luxury text-lg sm:text-2xl text-[#1a1a1a] font-bold hover:text-[#c4a47c] cursor-pointer transition-colors mt-1.5 line-clamp-2 sm:line-clamp-1"
           >
             {property.title}
           </h3>
 
           {/* Subtitle / Locality */}
-          <p className="editorial-label text-[#1a1a1a]/60 mt-1 mb-3">
+          <p className="editorial-label text-[#1a1a1a]/60 mt-1 mb-2.5 truncate">
             {property.locality} • {property.city} {property.builderName ? `• ${property.builderName}` : ''}
           </p>
 
           {/* Area & Possession Grid */}
-          <div className="grid grid-cols-2 gap-3 py-2.5 border-t border-b border-[#1a1a1a]/10 my-2 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 py-2.5 border-t border-b border-[#1a1a1a]/10 my-2 text-xs">
             <div className="editorial-label text-[#1a1a1a]/80">
-              Area: <span className="font-bold text-[#1a1a1a]">{property.areaSqFt} sq.ft</span>
+              Area: <span className="font-bold text-[#1a1a1a] block sm:inline">{property.areaSqFt} sq.ft</span>
             </div>
             <div className="editorial-label text-[#1a1a1a]/80">
-              Possession: <span className="font-bold text-[#1a1a1a]">{property.possession}</span>
+              Possession: <span className="font-bold text-[#1a1a1a] block sm:inline truncate">{property.possession}</span>
             </div>
             <div className="editorial-label text-[#1a1a1a]/80">
-              BHK: <span className="font-bold text-[#1a1a1a]">{property.bhk > 0 ? `${property.bhk} BHK` : property.type}</span>
+              BHK: <span className="font-bold text-[#1a1a1a] block sm:inline">{property.bhk > 0 ? `${property.bhk} BHK` : property.type}</span>
             </div>
             <div className="editorial-label text-[#1a1a1a]/80">
-              Furnishing: <span className="font-bold text-[#1a1a1a]">{property.furnishing}</span>
+              Furnishing: <span className="font-bold text-[#1a1a1a] block sm:inline truncate">{property.furnishing}</span>
             </div>
           </div>
 
           {/* Pill Amenities */}
-          <div className="flex flex-wrap items-center gap-1.5 mt-3">
+          <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
             {property.amenities.slice(0, 4).map((amenity, idx) => (
-              <span key={idx} className="editorial-pill">
+              <span key={idx} className="editorial-pill text-[11px] py-1 px-2.5">
                 {amenity}
               </span>
             ))}
@@ -203,30 +203,32 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* Actions Button Bar */}
-        <div className="mt-5 pt-3 border-t border-[#1a1a1a]/10 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-4 sm:mt-5 pt-3 border-t border-[#1a1a1a]/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Seller info */}
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-[#1a1a1a] text-[#fdfcf9] font-mono-luxury font-bold text-xs flex items-center justify-center">
+            <div className="w-7 h-7 bg-[#1a1a1a] text-[#fdfcf9] font-mono-luxury font-bold text-xs flex items-center justify-center shrink-0">
               {property.seller.name.charAt(0)}
             </div>
-            <div className="text-xs">
-              <span className="font-mono-luxury text-[11px] font-bold text-[#1a1a1a] block">
+            <div className="text-xs min-w-0">
+              <span className="font-mono-luxury text-[11px] font-bold text-[#1a1a1a] block truncate">
                 {property.seller.name}
               </span>
-              <span className="editorial-label text-[#1a1a1a]/50 text-[9px]">
+              <span className="editorial-label text-[#1a1a1a]/50 text-[9px] block">
                 {property.postedBy}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Action buttons */}
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
             {/* Brochure Download */}
             <button
               type="button"
               onClick={() => onOpenBrochure ? onOpenBrochure(property) : onSelectProperty(property)}
-              className="editorial-label px-3 py-2 text-[#1a1a1a] border border-[#c4a47c] hover:bg-[#c4a47c]/10 bg-transparent cursor-pointer flex items-center gap-1.5 font-bold"
+              className="editorial-label py-2 px-2.5 sm:px-3 text-[#1a1a1a] border border-[#c4a47c] hover:bg-[#c4a47c]/10 bg-transparent cursor-pointer flex items-center justify-center gap-1 font-bold text-[11px] min-h-[38px]"
               title="Download Official Project Brochure PDF"
             >
-              <Download className="w-3.5 h-3.5 text-[#c4a47c]" />
+              <Download className="w-3.5 h-3.5 text-[#c4a47c] shrink-0" />
               <span>Brochure</span>
             </button>
 
@@ -234,9 +236,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             <button
               type="button"
               onClick={() => onScheduleVisit(property)}
-              className="editorial-label px-3 py-2 text-[#1a1a1a] border border-[#1a1a1a]/30 hover:border-[#1a1a1a] bg-transparent cursor-pointer flex items-center gap-1.5"
+              className="editorial-label py-2 px-2.5 sm:px-3 text-[#1a1a1a] border border-[#1a1a1a]/30 hover:border-[#1a1a1a] bg-transparent cursor-pointer flex items-center justify-center gap-1 text-[11px] min-h-[38px]"
+              title="Schedule free site tour"
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-3.5 h-3.5 shrink-0" />
               <span>Visit</span>
             </button>
 
@@ -247,9 +250,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
                 const msg = `Hello ${property.seller.name}, I am inquiring about "${property.title}" (${property.priceDisplay}, ${property.locality}, ${property.city} - ID: ${property.id}).`;
                 openWhatsAppChat(property.seller.phone, msg);
               }}
-              className="editorial-label px-3.5 py-2 bg-[#25d366] hover:bg-[#20ba5a] text-white font-bold cursor-pointer flex items-center gap-1.5 shadow-xs"
+              className="editorial-label py-2 px-2.5 sm:px-3.5 bg-[#25d366] hover:bg-[#20ba5a] text-white font-bold cursor-pointer flex items-center justify-center gap-1 shadow-xs text-[11px] min-h-[38px]"
             >
-              <MessageSquare className="w-3.5 h-3.5" />
+              <MessageSquare className="w-3.5 h-3.5 shrink-0" />
               <span>WhatsApp</span>
             </button>
 
@@ -257,7 +260,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             <button
               type="button"
               onClick={() => onSelectProperty(property)}
-              className="editorial-label px-4 py-2 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] font-bold cursor-pointer transition-all border border-[#1a1a1a]"
+              className="editorial-label py-2 px-2.5 sm:px-4 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] font-bold cursor-pointer transition-all border border-[#1a1a1a] text-center flex items-center justify-center text-[11px] min-h-[38px]"
             >
               Details
             </button>

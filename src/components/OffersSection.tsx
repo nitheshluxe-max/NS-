@@ -60,16 +60,16 @@ export const OffersSection: React.FC<OffersSectionProps> = ({
   ].filter(c => c.count > 0 || c.id === 'all');
 
   return (
-    <section id="offers-deals-section" className="py-10 bg-[#fdfcf9] border-b-2 border-[#1a1a1a]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="offers-deals-section" className="py-6 sm:py-10 bg-[#fdfcf9] border-b-2 border-[#1a1a1a] w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div className="flex flex-wrap items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#c4a47c] animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#c4a47c] animate-pulse shrink-0" />
               <span className="font-mono-luxury text-xs text-[#c4a47c] font-black uppercase tracking-widest flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-[#c4a47c]" />
+                <Flame className="w-3.5 h-3.5 text-[#c4a47c] shrink-0" />
                 Exclusive Concessions & Builder Promotions
               </span>
             </div>
@@ -86,7 +86,7 @@ export const OffersSection: React.FC<OffersSectionProps> = ({
               <button
                 type="button"
                 onClick={onOpenPlansModal}
-                className="px-3.5 py-1.5 bg-white border border-[#1a1a1a] hover:bg-black hover:text-white text-[#1a1a1a] font-bold uppercase transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+                className="px-3 sm:px-3.5 py-1.5 bg-white border border-[#1a1a1a] hover:bg-black hover:text-white text-[#1a1a1a] font-bold uppercase transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
               >
                 <span>Agent & Builder Plans</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -96,7 +96,7 @@ export const OffersSection: React.FC<OffersSectionProps> = ({
         </div>
 
         {/* Category Pills Strip */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-3 mb-6 scrollbar-none font-mono-luxury">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2.5 mb-5 scrollbar-none font-mono-luxury w-full">
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.id;
             return (
@@ -121,7 +121,7 @@ export const OffersSection: React.FC<OffersSectionProps> = ({
         </div>
 
         {/* Offers Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-mono-luxury">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 font-mono-luxury">
           {filteredOffers.map((offer) => {
             // Find first matched property or default representative property
             const matchedProp = properties.find((p) => {

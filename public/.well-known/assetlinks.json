@@ -1,0 +1,24 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.nsproperties.app",
+      "sha256_cert_fingerprints": [
+        "14:6D:E9:DE:4E:9F:8E:B2:D0:D4:56:56:47:82:17:80:FF:03:7E:8C:F9:64:CF:57:3F:8E:B6:F4:6F:E1:92:02",
+        "E2:73:96:A8:FB:5E:2B:6E:5B:DC:65:21:49:15:BE:E5:69:B6:FE:57:4E:57:D8:1A:F7:BA:3C:99:C9:92:DF:99"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.nsproperties.realestate",
+      "sha256_cert_fingerprints": [
+        "14:6D:E9:DE:4E:9F:8E:B2:D0:D4:56:56:47:82:17:80:FF:03:7E:8C:F9:64:CF:57:3F:8E:B6:F4:6F:E1:92:02",
+        "E2:73:96:A8:FB:5E:2B:6E:5B:DC:65:21:49:15:BE:E5:69:B6:FE:57:4E:57:D8:1A:F7:BA:3C:99:C9:92:DF:99"
+      ]
+    }
+  }
+]

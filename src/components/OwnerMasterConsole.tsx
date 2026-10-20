@@ -18,6 +18,7 @@ import {
   Plus, 
   Check, 
   Search, 
+  Copy,
   Download, 
   Phone, 
   Mail, 
@@ -53,17 +54,29 @@ import {
   BugTicket,
   UserRole,
   Offer,
-  OfferEnquiry
+  OfferEnquiry,
+  PropertyPublishStatus
 } from '../types';
 import { ROLE_PERMISSIONS } from '../data/ownerDeveloperData';
 import { openWhatsAppChat } from '../utils/whatsapp';
+import { PUBLIC_SHARED_APP_URL } from '../utils/shareUrl';
 import { OwnerPlansOffersManager } from './OwnerPlansOffersManager';
+import {
+  createPropertyInCentralDb,
+  updatePropertyInCentralDb,
+  updatePropertyStatusInCentralDb,
+  deletePropertyFromCentralDb,
+  bulkPriceAdjustmentInCentralDb,
+  addMediaToPropertyInCentralDb
+} from '../services/propertyService';
 
 interface OwnerMasterConsoleProps {
   isOpen: boolean;
   onClose: () => void;
   properties: Property[];
   onUpdateProperties: (props: Property[]) => void;
+  onRefreshProperties?: () => Promise<void> | void;
+  isSyncingProperties?: boolean;
   leads: VisitorLead[];
   onUpdateLeads: (leads: VisitorLead[]) => void;
   users: UserAccount[];
@@ -95,6 +108,7 @@ type OwnerTab =
   | 'staff'
   | 'permissions'
   | 'subscriptions'
+  | 'domain'
   | 'settings';
 
 export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
@@ -102,6 +116,8 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
   onClose,
   properties,
   onUpdateProperties,
+  onRefreshProperties,
+  isSyncingProperties = false,
   leads,
   onUpdateLeads,
   users,
@@ -126,7 +142,11 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
 
   // Property modal / edit state
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [editFormData, setEditFormData] = useState<Partial<Property>>({});
+  const [isEditingSaving, setIsEditingSaving] = useState(false);
   const [isAddPropertyOpen, setIsAddPropertyOpen] = useState(false);
+  const [isSubmittingProp, setIsSubmittingProp] = useState(false);
+  const [newPropStatus, setNewPropStatus] = useState<PropertyPublishStatus>('published');
   const [newPropTitle, setNewPropTitle] = useState('');
   const [newPropCity, setNewPropCity] = useState('Bengaluru');
   const [newPropLocality, setNewPropLocality] = useState('Whitefield');
@@ -174,9 +194,59 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
   const [newDevProblemSeverity, setNewDevProblemSeverity] = useState<'critical' | 'high' | 'medium' | 'low'>('high');
   const [newDevProblemDesc, setNewDevProblemDesc] = useState('');
 
+  // Domain forwarding state
+  const [purchasedDomainInput, setPurchasedDomainInput] = useState(() => {
+    return localStorage.getItem('NS_PURCHASED_CUSTOM_DOMAIN') || 'nsproperties4.com';
+  });
+  const [savedPurchasedDomain, setSavedPurchasedDomain] = useState(() => {
+    return localStorage.getItem('NS_PURCHASED_CUSTOM_DOMAIN') || 'nsproperties4.com';
+  });
+  const [copiedTargetUrl, setCopiedTargetUrl] = useState(false);
+  const [activeRegistrarGuide, setActiveRegistrarGuide] = useState<'bigrock' | 'godaddy' | 'hostinger' | 'namecheap' | 'cloudflare'>('bigrock');
+  const [isTestingDomain, setIsTestingDomain] = useState(false);
+  const [testDomainResult, setTestDomainResult] = useState<string | null>(null);
+
   const showNotification = (msg: string) => {
     setStatusMessage(msg);
     setTimeout(() => setStatusMessage(''), 3000);
+  };
+
+  const handleSavePurchasedDomain = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanDomain = purchasedDomainInput.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+    if (!cleanDomain) {
+      showNotification('Please enter a valid domain name (e.g., nsproperties.in)');
+      return;
+    }
+    localStorage.setItem('NS_PURCHASED_CUSTOM_DOMAIN', cleanDomain);
+    setSavedPurchasedDomain(cleanDomain);
+    showNotification(`Domain "${cleanDomain}" saved! Configure forwarding below.`);
+  };
+
+  const handleCopyTargetUrl = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(PUBLIC_SHARED_APP_URL);
+      setCopiedTargetUrl(true);
+      setTimeout(() => setCopiedTargetUrl(false), 2000);
+      showNotification('Target Destination URL copied to clipboard!');
+    }
+  };
+
+  const handleTestDomainForwarding = () => {
+    const domain = savedPurchasedDomain || purchasedDomainInput.trim();
+    if (!domain) {
+      showNotification('Please enter your purchased domain name first.');
+      return;
+    }
+    const clean = domain.toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+    setIsTestingDomain(true);
+    setTestDomainResult(null);
+
+    setTimeout(() => {
+      setIsTestingDomain(false);
+      setTestDomainResult(`Opening https://${clean} in a new tab... Verify your registrar forwarding status.`);
+      window.open(`https://${clean}`, '_blank');
+    }, 600);
   };
 
   // Agents list for assignment
@@ -187,48 +257,118 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
   if (!isOpen) return null;
 
   // Handlers for Properties
-  const handleDeleteProperty = (id: string) => {
-    if (confirm('Are you sure you want to permanently delete this property listing?')) {
-      const updated = properties.filter((p) => p.id !== id);
-      onUpdateProperties(updated);
-      showNotification('Property listing permanently deleted by App Owner.');
+  const handleDeleteProperty = async (id: string) => {
+    if (confirm('Are you sure you want to permanently delete this property listing from the central database?')) {
+      try {
+        await deletePropertyFromCentralDb(id, 'owner');
+        const updated = properties.filter((p) => p.id !== id);
+        onUpdateProperties(updated);
+        showNotification('Property listing permanently deleted from central database.');
+        if (onRefreshProperties) await onRefreshProperties();
+      } catch (err: any) {
+        showNotification(`Delete failed: ${err.message || err}`);
+      }
     }
   };
 
-  const handleToggleDisableProperty = (id: string) => {
-    const updated = properties.map((p) => {
-      if (p.id === id) {
-        const nextState = !p.isDisabled;
-        return { ...p, isDisabled: nextState };
-      }
-      return p;
-    });
-    onUpdateProperties(updated);
-    showNotification('Property visibility status updated.');
+  const handleToggleDisableProperty = async (id: string) => {
+    try {
+      const target = properties.find((p) => p.id === id);
+      if (!target) return;
+      const nextState = !target.isDisabled;
+      const nextStatus: PropertyPublishStatus = nextState ? 'inactive' : 'published';
+      const updatedProp = await updatePropertyInCentralDb(id, { isDisabled: nextState, status: nextStatus }, 'owner');
+      const updated = properties.map((p) => (p.id === id ? updatedProp : p));
+      onUpdateProperties(updated);
+      showNotification(`Listing ${nextState ? 'disabled (hidden from visitors)' : 'enabled (live for visitors)'} in central database.`);
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Status update failed: ${err.message || err}`);
+    }
   };
 
-  const handleToggleFeaturedProperty = (id: string) => {
-    const updated = properties.map((p) => {
-      if (p.id === id) {
-        return { ...p, isFeatured: !p.isFeatured };
-      }
-      return p;
-    });
-    onUpdateProperties(updated);
-    showNotification('Featured status updated.');
+  const handleToggleFeaturedProperty = async (id: string) => {
+    try {
+      const target = properties.find((p) => p.id === id);
+      if (!target) return;
+      const updatedProp = await updatePropertyInCentralDb(id, { isFeatured: !target.isFeatured }, 'owner');
+      const updated = properties.map((p) => (p.id === id ? updatedProp : p));
+      onUpdateProperties(updated);
+      showNotification('Featured status updated in central database.');
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Update failed: ${err.message || err}`);
+    }
   };
 
-  const handleCreateProperty = (e: React.FormEvent) => {
+  const handleStatusChange = async (id: string, status: PropertyPublishStatus) => {
+    try {
+      const updatedProp = await updatePropertyStatusInCentralDb(id, status, 'owner');
+      const updated = properties.map((p) => (p.id === id ? updatedProp : p));
+      onUpdateProperties(updated);
+      showNotification(`Property status set to "${status}" in central database.`);
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Status change failed: ${err.message || err}`);
+    }
+  };
+
+  const handleOpenEdit = (prop: Property) => {
+    setEditingProperty(prop);
+    setEditFormData({
+      title: prop.title,
+      projectName: prop.projectName,
+      builderName: prop.builderName,
+      purpose: prop.purpose,
+      category: prop.category,
+      type: prop.type,
+      bhk: prop.bhk,
+      bathrooms: prop.bathrooms,
+      price: prop.price,
+      areaSqFt: prop.areaSqFt,
+      city: prop.city,
+      locality: prop.locality,
+      address: prop.address,
+      status: prop.status || (prop.isDisabled ? 'inactive' : 'published'),
+      isVerified: prop.isVerified,
+      isFeatured: prop.isFeatured,
+      description: prop.description
+    });
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!editingProperty) return;
+    setIsEditingSaving(true);
+    try {
+      const updatedProp = await updatePropertyInCentralDb(editingProperty.id, editFormData, 'owner');
+      const updated = properties.map((p) => (p.id === editingProperty.id ? updatedProp : p));
+      onUpdateProperties(updated);
+      setEditingProperty(null);
+      showNotification(`Property "${updatedProp.title}" updated in central database!`);
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Update failed: ${err.message || err}`);
+    } finally {
+      setIsEditingSaving(false);
+    }
+  };
+
+  const handleCreateProperty = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPropTitle.trim()) {
+      showNotification('Property title is required.');
+      return;
+    }
+    setIsSubmittingProp(true);
     const priceNum = parseFloat(newPropPrice) || 10000000;
     const areaNum = parseFloat(newPropArea) || 1200;
     const pricePerSqFt = Math.round(priceNum / areaNum);
     const crValue = (priceNum / 10000000).toFixed(2);
 
-    const newProperty: Property = {
-      id: `prop-owner-${Date.now()}`,
-      title: newPropTitle || 'Luxury Home by App Owner',
-      projectName: newPropTitle || 'NS Luxury Heights',
+    const newPropertyData: Partial<Property> = {
+      title: newPropTitle.trim(),
+      projectName: newPropTitle.trim() || 'NS Luxury Residency',
       builderName: 'NS Properties Direct',
       purpose: newPropPurpose,
       category: 'residential',
@@ -237,21 +377,23 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
       bathrooms: parseInt(newPropBhk) || 3,
       balconies: 2,
       price: priceNum,
-      priceDisplay: `₹ ${crValue} Cr`,
+      priceDisplay: newPropPurpose === 'rent' ? `₹ ${(priceNum / 1000).toFixed(0)}k / mo` : `₹ ${crValue} Cr`,
       pricePerSqFt,
       areaSqFt: areaNum,
       carpetAreaSqFt: Math.round(areaNum * 0.78),
-      city: newPropCity,
-      locality: newPropLocality,
-      address: `${newPropLocality}, ${newPropCity}`,
+      city: newPropCity.trim() || 'Bengaluru',
+      locality: newPropLocality.trim() || 'Whitefield',
+      address: `${newPropLocality.trim() || 'Whitefield'}, ${newPropCity.trim() || 'Bengaluru'}`,
       furnishing: 'Semi-Furnished',
       possession: 'Ready to Move',
+      status: newPropStatus,
       isVerified: true,
       isExclusive: true,
       isFeatured: true,
+      isDisabled: newPropStatus === 'inactive',
       postedBy: 'Owner',
       postedDate: 'Just now',
-      images: [newPropImage],
+      images: [newPropImage || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80'],
       amenities: ['24/7 Security', 'Power Backup', 'Gym', 'Swimming Pool', 'EV Charging'],
       description: 'Listed directly by App Owner with verified documents and clear legal title.',
       landmarks: [
@@ -266,73 +408,76 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
       }
     };
 
-    onUpdateProperties([newProperty, ...properties]);
-    setIsAddPropertyOpen(false);
-    setNewPropTitle('');
-    showNotification('New property created successfully!');
+    try {
+      const saved = await createPropertyInCentralDb(newPropertyData, 'owner');
+      onUpdateProperties([saved, ...properties]);
+      setIsAddPropertyOpen(false);
+      setNewPropTitle('');
+      showNotification(`New property published live with ID #${saved.id}!`);
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Database error: ${err.message || err}`);
+    } finally {
+      setIsSubmittingProp(false);
+    }
   };
 
   // Price adjustment handlers
-  const handleApplyDiscountToProperty = (propId: string) => {
+  const handleApplyDiscountToProperty = async (propId: string) => {
     if (!propId) return;
     const percent = parseFloat(priceHikePercent) || 5;
-    const updated = properties.map((p) => {
-      if (p.id === propId) {
-        const discountedPrice = Math.round(p.price * (1 - percent / 100));
-        const crValue = (discountedPrice / 10000000).toFixed(2);
-        return {
-          ...p,
-          price: discountedPrice,
-          priceDisplay: `₹ ${crValue} Cr`,
-          pricePerSqFt: Math.round(discountedPrice / p.areaSqFt),
-          discountPercentage: percent,
-          description: `[SPECIAL OFFER: ${discountTag}] ` + p.description
-        };
+    try {
+      const updatedList = await bulkPriceAdjustmentInCentralDb({
+        propId,
+        percent,
+        discountTag
+      }, 'owner');
+      if (updatedList[0]) {
+        const updated = properties.map((p) => (p.id === propId ? updatedList[0] : p));
+        onUpdateProperties(updated);
+        showNotification(`Applied ${percent}% discount with tag "${discountTag}" in central database.`);
+        if (onRefreshProperties) await onRefreshProperties();
       }
-      return p;
-    });
-    onUpdateProperties(updated);
-    showNotification(`Applied ${percent}% discount with tag "${discountTag}".`);
+    } catch (err: any) {
+      showNotification(`Discount failed: ${err.message || err}`);
+    }
   };
 
-  const handleBulkPriceAdjustment = (increase: boolean) => {
+  const handleBulkPriceAdjustment = async (increase: boolean) => {
     const percent = parseFloat(priceHikePercent) || 5;
-    const factor = increase ? (1 + percent / 100) : (1 - percent / 100);
-    const updated = properties.map((p) => {
-      const newPrice = Math.round(p.price * factor);
-      const crValue = (newPrice / 10000000).toFixed(2);
-      return {
-        ...p,
-        price: newPrice,
-        priceDisplay: `₹ ${crValue} Cr`,
-        pricePerSqFt: Math.round(newPrice / p.areaSqFt)
-      };
-    });
-    onUpdateProperties(updated);
-    showNotification(`Bulk adjusted all property prices by ${increase ? '+' : '-'}${percent}%.`);
+    try {
+      const updatedList = await bulkPriceAdjustmentInCentralDb({
+        percent,
+        increase
+      }, 'owner');
+      onUpdateProperties(updatedList);
+      showNotification(`Bulk adjusted all property prices by ${increase ? '+' : '-'}${percent}% in central database.`);
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Bulk adjustment failed: ${err.message || err}`);
+    }
   };
 
   // Media addition handler
-  const handleAddMedia = (e: React.FormEvent) => {
+  const handleAddMedia = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPropForMedia) return;
-    const updated = properties.map((p) => {
-      if (p.id === selectedPropForMedia) {
-        const newImages = newImageUrl ? [...p.images, newImageUrl.trim()] : p.images;
-        return {
-          ...p,
-          images: newImages,
-          videoUrl: newVideoUrl.trim() || p.videoUrl,
-          virtualTourUrl: newTourUrl.trim() || p.virtualTourUrl
-        };
-      }
-      return p;
-    });
-    onUpdateProperties(updated);
-    setNewImageUrl('');
-    setNewVideoUrl('');
-    setNewTourUrl('');
-    showNotification('Photos & video tour updated for listing.');
+    try {
+      const updatedProp = await addMediaToPropertyInCentralDb(selectedPropForMedia, {
+        imageUrl: newImageUrl,
+        videoUrl: newVideoUrl,
+        virtualTourUrl: newTourUrl
+      }, 'owner');
+      const updated = properties.map((p) => (p.id === selectedPropForMedia ? updatedProp : p));
+      onUpdateProperties(updated);
+      setNewImageUrl('');
+      setNewVideoUrl('');
+      setNewTourUrl('');
+      showNotification('Photos & video tour updated in central database.');
+      if (onRefreshProperties) await onRefreshProperties();
+    } catch (err: any) {
+      showNotification(`Media update failed: ${err.message || err}`);
+    }
   };
 
   // User management handlers
@@ -546,6 +691,7 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
             { id: 'staff', label: 'Staff & Developer Control', icon: ShieldAlert },
             { id: 'permissions', label: 'Permissions (RBAC)', icon: Lock },
             { id: 'subscriptions', label: 'Subscriptions & Billing', icon: CreditCard },
+            { id: 'domain', label: 'Domain & Forwarding', icon: Globe },
             { id: 'settings', label: 'App Settings & Alerts', icon: Settings }
           ].map((tab) => {
             const Icon = tab.icon;
@@ -609,6 +755,17 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {onRefreshProperties && (
+                    <button
+                      onClick={() => onRefreshProperties()}
+                      disabled={isSyncingProperties}
+                      className="px-3 py-1.5 bg-white border border-[#1a1a1a]/30 hover:bg-[#fdfcf9] text-[#1a1a1a] font-mono-luxury uppercase text-xs font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                      title="Fetch latest properties from Central Backend Database"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 text-[#c4a47c] ${isSyncingProperties ? 'animate-spin' : ''}`} />
+                      <span>{isSyncingProperties ? 'Syncing...' : 'Sync Central DB'}</span>
+                    </button>
+                  )}
                   <button
                     onClick={() => setIsAddPropertyOpen(true)}
                     className="px-3.5 py-1.5 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] font-mono-luxury uppercase text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-black"
@@ -705,6 +862,19 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                       />
                     </div>
                     <div>
+                      <label className="block text-white/70 mb-1">Publish Status:</label>
+                      <select
+                        value={newPropStatus}
+                        onChange={(e) => setNewPropStatus(e.target.value as PropertyPublishStatus)}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      >
+                        <option value="published">🟢 Published (Live for all users)</option>
+                        <option value="draft">🟡 Draft (Hidden from public users)</option>
+                        <option value="inactive">🔴 Inactive (Archived)</option>
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-3">
                       <label className="block text-white/70 mb-1">Main Cover Photo URL:</label>
                       <input
                         type="text"
@@ -724,9 +894,150 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                       </button>
                       <button
                         type="submit"
-                        className="px-5 py-1.5 bg-[#c4a47c] text-black font-bold uppercase cursor-pointer hover:bg-[#b09066]"
+                        disabled={isSubmittingProp}
+                        className="px-5 py-1.5 bg-[#c4a47c] text-black font-bold uppercase cursor-pointer hover:bg-[#b09066] disabled:opacity-50 flex items-center gap-1.5"
                       >
-                        Publish Listing Directly
+                        {isSubmittingProp ? (
+                          <>
+                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                            <span>Saving to Central DB...</span>
+                          </>
+                        ) : (
+                          <span>Publish to Central DB</span>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {/* Edit Property Drawer / Modal */}
+              {editingProperty && (
+                <div className="bg-[#1a1a1a] text-white p-5 border-2 border-amber-500 mb-4 space-y-4">
+                  <div className="flex items-center justify-between border-b border-white/20 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <h4 className="font-serif-luxury text-lg font-bold text-amber-400">
+                        Edit Property Listing #{editingProperty.id}
+                      </h4>
+                    </div>
+                    <button onClick={() => setEditingProperty(null)} className="text-white/60 hover:text-white">
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleSaveEdit} className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono-luxury">
+                    <div className="sm:col-span-2">
+                      <label className="block text-white/70 mb-1">Property Title:</label>
+                      <input
+                        type="text"
+                        required
+                        value={editFormData.title || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/70 mb-1">Publish Status:</label>
+                      <select
+                        value={editFormData.status || 'published'}
+                        onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value as PropertyPublishStatus })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      >
+                        <option value="published">🟢 Published (Live for all users)</option>
+                        <option value="draft">🟡 Draft (Hidden from public)</option>
+                        <option value="inactive">🔴 Inactive</option>
+                        <option value="deleted">⚫ Deleted</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-white/70 mb-1">City:</label>
+                      <input
+                        type="text"
+                        value={editFormData.city || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, city: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/70 mb-1">Locality:</label>
+                      <input
+                        type="text"
+                        value={editFormData.locality || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, locality: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/70 mb-1">Price (₹ in Rupees):</label>
+                      <input
+                        type="number"
+                        value={editFormData.price || 0}
+                        onChange={(e) => setEditFormData({ ...editFormData, price: Number(e.target.value) })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-white/70 mb-1">Bedrooms (BHK):</label>
+                      <input
+                        type="number"
+                        value={editFormData.bhk || 0}
+                        onChange={(e) => setEditFormData({ ...editFormData, bhk: Number(e.target.value) })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/70 mb-1">Area (Sq.Ft):</label>
+                      <input
+                        type="number"
+                        value={editFormData.areaSqFt || 0}
+                        onChange={(e) => setEditFormData({ ...editFormData, areaSqFt: Number(e.target.value) })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/70 mb-1">Project Name:</label>
+                      <input
+                        type="text"
+                        value={editFormData.projectName || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, projectName: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <label className="block text-white/70 mb-1">Description:</label>
+                      <textarea
+                        rows={2}
+                        value={editFormData.description || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-black border border-white/30 text-white"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-3 flex justify-end gap-2 pt-2 border-t border-white/20">
+                      <button
+                        type="button"
+                        onClick={() => setEditingProperty(null)}
+                        className="px-4 py-1.5 bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={isEditingSaving}
+                        className="px-5 py-1.5 bg-amber-500 text-black font-bold uppercase cursor-pointer hover:bg-amber-400 disabled:opacity-50 flex items-center gap-1.5"
+                      >
+                        {isEditingSaving ? (
+                          <>
+                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                            <span>Updating Central DB...</span>
+                          </>
+                        ) : (
+                          <span>Save Changes to Central DB</span>
+                        )}
                       </button>
                     </div>
                   </form>
@@ -743,13 +1054,13 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                       <th className="p-3">Location</th>
                       <th className="p-3">Price & Rate</th>
                       <th className="p-3">Type & BHK</th>
-                      <th className="p-3">Status</th>
+                      <th className="p-3">Publish Status</th>
                       <th className="p-3 text-right">App Owner Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#1a1a1a]/15">
                     {filteredProperties.map((p) => (
-                      <tr key={p.id} className={`hover:bg-[#fdfcf9] transition-colors ${p.isDisabled ? 'opacity-50 bg-gray-50' : ''}`}>
+                      <tr key={p.id} className={`hover:bg-[#fdfcf9] transition-colors ${p.isDisabled ? 'opacity-60 bg-gray-50' : ''}`}>
                         <td className="p-3 w-16">
                           <img
                             src={p.images[0] || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00'}
@@ -779,22 +1090,34 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                           <div className="text-[10px] text-[#1a1a1a]/60">{p.bhk} BHK • {p.areaSqFt} sq.ft</div>
                         </td>
                         <td className="p-3">
-                          {p.isDisabled ? (
-                            <span className="bg-red-950 text-red-300 border border-red-500/40 text-[9px] font-bold px-1.5 py-0.5 uppercase">
-                              Disabled
-                            </span>
-                          ) : (
-                            <span className="bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 uppercase">
-                              Active Live
-                            </span>
-                          )}
-                          {p.isFeatured && (
-                            <span className="ml-1 bg-amber-100 text-amber-900 border border-amber-400 text-[9px] font-bold px-1 py-0.2 uppercase">
-                              Featured
-                            </span>
-                          )}
+                          <div className="flex flex-col gap-1">
+                            <select
+                              value={p.status || (p.isDisabled ? 'inactive' : 'published')}
+                              onChange={(e) => handleStatusChange(p.id, e.target.value as PropertyPublishStatus)}
+                              className="bg-[#1a1a1a] text-white text-[10px] font-mono-luxury px-1.5 py-1 border border-[#1a1a1a]/30 cursor-pointer rounded-none focus:outline-hidden"
+                            >
+                              <option value="published">🟢 Published</option>
+                              <option value="draft">🟡 Draft</option>
+                              <option value="inactive">🔴 Inactive</option>
+                              <option value="deleted">⚫ Deleted</option>
+                            </select>
+                            {p.isFeatured && (
+                              <span className="bg-amber-100 text-amber-900 border border-amber-400 text-[9px] font-bold px-1 py-0.2 uppercase inline-block text-center">
+                                Featured
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="p-3 text-right space-x-1">
+                          {/* Edit in Central DB */}
+                          <button
+                            onClick={() => handleOpenEdit(p)}
+                            className="p-1.5 bg-amber-50 text-amber-800 hover:bg-amber-500 hover:text-black border border-amber-300 cursor-pointer transition-colors"
+                            title="Edit Listing in Central Database"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+
                           {/* Toggle Featured */}
                           <button
                             onClick={() => handleToggleFeaturedProperty(p.id)}
@@ -833,7 +1156,7 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                           <button
                             onClick={() => handleDeleteProperty(p.id)}
                             className="p-1.5 bg-red-100 text-red-700 hover:bg-red-700 hover:text-white border border-red-300 cursor-pointer transition-colors"
-                            title="Permanently Delete Property"
+                            title="Permanently Delete Property from Central DB"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1789,6 +2112,332 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: DOMAIN & WEBSITE FORWARDING */}
+          {activeTab === 'domain' && (
+            <div className="space-y-6 animate-fadeIn">
+              {/* Header Card */}
+              <div className="border border-[#1a1a1a] bg-white p-5 space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-[#1a1a1a]/15">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-[#1a1a1a] text-[#c4a47c] flex items-center justify-center">
+                      <Globe className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif-luxury font-bold text-base text-[#1a1a1a]">
+                        Purchased Website & Custom Domain Forwarding
+                      </h4>
+                      <p className="text-xs font-mono-luxury text-[#1a1a1a]/60">
+                        Connect your purchased domain (GoDaddy, Hostinger, Namecheap, etc.) to your live NS Properties portal
+                      </p>
+                    </div>
+                  </div>
+
+                  {savedPurchasedDomain ? (
+                    <span className="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold font-mono-luxury flex items-center gap-1.5 border border-emerald-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Configured: {savedPurchasedDomain}</span>
+                    </span>
+                  ) : (
+                    <span className="px-2.5 py-1 bg-amber-100 text-amber-900 text-xs font-bold font-mono-luxury flex items-center gap-1.5 border border-amber-300">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Domain Not Linked Yet</span>
+                    </span>
+                  )}
+                </div>
+
+                {/* TARGET DESTINATION URL (CRITICAL INFORMATION) */}
+                <div className="bg-[#fdfcf9] border-2 border-[#c4a47c] p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold font-mono-luxury uppercase tracking-wider text-[#1a1a1a] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#c4a47c]" />
+                      <span>Your Live Website Target URL (Copy This)</span>
+                    </span>
+                    <span className="text-[10px] bg-[#1a1a1a] text-[#c4a47c] px-2 py-0.5 font-bold uppercase">
+                      Destination Address
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#1a1a1a]/70 font-mono-luxury">
+                    This is the live, public address of your NS Properties portal. In your domain provider (GoDaddy, Hostinger, etc.), point or forward your domain to this exact URL:
+                  </p>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <div className="flex-1 bg-white border border-[#1a1a1a] px-3 py-2 font-mono-luxury text-xs text-[#1a1a1a] font-bold truncate select-all">
+                      {PUBLIC_SHARED_APP_URL}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleCopyTargetUrl}
+                      className="px-4 py-2 bg-[#1a1a1a] hover:bg-black text-[#c4a47c] border border-[#c4a47c] font-bold text-xs uppercase font-mono-luxury flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                    >
+                      {copiedTargetUrl ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                      <span>{copiedTargetUrl ? 'Copied!' : 'Copy Target URL'}</span>
+                    </button>
+
+                    <a
+                      href={PUBLIC_SHARED_APP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 bg-[#fdfcf9] hover:bg-white text-[#1a1a1a] border border-[#1a1a1a] cursor-pointer shrink-0"
+                      title="Open Live Destination URL in new tab"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* STEP 1: CONFIGURE PURCHASED DOMAIN INPUT */}
+                <form onSubmit={handleSavePurchasedDomain} className="bg-white border border-[#1a1a1a]/20 p-4 space-y-3">
+                  <h5 className="font-serif-luxury font-bold text-sm text-[#1a1a1a] flex items-center gap-1.5">
+                    <Globe className="w-4 h-4 text-[#c4a47c]" />
+                    <span>Step 1: Enter Your Purchased Domain Name</span>
+                  </h5>
+
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={purchasedDomainInput}
+                      onChange={(e) => setPurchasedDomainInput(e.target.value)}
+                      placeholder="e.g., nsproperties.in, nspropertiesluxury.com, www.nsproperties.in"
+                      className="flex-1 px-3 py-2 border border-[#1a1a1a] text-xs font-mono-luxury outline-none bg-[#fdfcf9]"
+                    />
+                    <button
+                      type="submit"
+                      className="px-5 py-2 bg-[#c4a47c] hover:bg-[#b09066] text-black font-bold text-xs uppercase font-mono-luxury cursor-pointer transition-colors whitespace-nowrap"
+                    >
+                      Save Domain Settings
+                    </button>
+                  </div>
+                  <span className="text-[10px] text-gray-500 font-mono-luxury block">
+                    Saved in browser settings so your portal links, PWA manifests, and share badges recognize your custom domain.
+                  </span>
+                </form>
+              </div>
+
+              {/* STEP 2: FORWARDING GUIDES (BY REGISTRAR) */}
+              <div className="border border-[#1a1a1a] bg-white p-5 space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-[#1a1a1a]/15">
+                  <h5 className="font-serif-luxury font-bold text-base text-[#1a1a1a]">
+                    Step 2: Select Your Domain Registrar (Click-by-Click Instructions)
+                  </h5>
+                  <span className="text-[10px] text-gray-500 font-mono-luxury">
+                    Select where you purchased your domain:
+                  </span>
+                </div>
+
+                {/* Registrar Selector Tabs */}
+                <div className="flex flex-wrap gap-1.5 border-b border-[#1a1a1a]/20 pb-2">
+                  {[
+                    { id: 'godaddy', label: 'GoDaddy' },
+                    { id: 'hostinger', label: 'Hostinger' },
+                    { id: 'namecheap', label: 'Namecheap' },
+                    { id: 'bigrock', label: 'BigRock' },
+                    { id: 'cloudflare', label: 'Cloudflare (Free Custom SSL)' }
+                  ].map((reg) => (
+                    <button
+                      key={reg.id}
+                      type="button"
+                      onClick={() => setActiveRegistrarGuide(reg.id as any)}
+                      className={`px-3 py-1.5 text-xs font-mono-luxury font-bold uppercase transition-colors cursor-pointer border ${
+                        activeRegistrarGuide === reg.id
+                          ? 'bg-[#1a1a1a] text-[#c4a47c] border-[#1a1a1a]'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-black'
+                      }`}
+                    >
+                      {reg.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* GODADDY GUIDE */}
+                {activeRegistrarGuide === 'godaddy' && (
+                  <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 space-y-3 font-mono-luxury text-xs text-[#1a1a1a]">
+                    <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
+                      <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
+                      <span>How to Forward Your Purchased Domain on GoDaddy</span>
+                    </div>
+
+                    <ol className="list-decimal list-inside space-y-2 text-[#1a1a1a]/80 pl-1 leading-relaxed">
+                      <li>Log in to your <strong>GoDaddy Account</strong>.</li>
+                      <li>Go to <strong>My Products</strong> and click on your purchased domain (e.g., <em>{savedPurchasedDomain || 'nsproperties.in'}</em>).</li>
+                      <li>Scroll down to the <strong>Additional Settings</strong> section and click <strong>Manage DNS</strong>.</li>
+                      <li>Scroll down to the <strong>Forwarding</strong> section and click <strong>Add Forwarding</strong> next to <em>Domain</em>.</li>
+                      <li>
+                        In the <strong>Forward To</strong> dropdown, select <span className="font-bold text-blue-700">https://</span> and paste your Target URL:
+                        <div className="bg-white p-2 border border-[#1a1a1a]/30 my-1 font-bold select-all text-[11px] text-[#1a1a1a]">
+                          {PUBLIC_SHARED_APP_URL.replace('https://', '')}
+                        </div>
+                      </li>
+                      <li><strong>Forward Type:</strong> Select <strong>Permanent (301)</strong>.</li>
+                      <li><strong>Forwarding Settings:</strong> Choose <strong>Forward with Masking</strong> (if you want your purchased domain to stay in the address bar) or <strong>Forward Only</strong>.</li>
+                      <li>Click <strong>Save</strong>. GoDaddy DNS propagation takes approximately 10 to 30 minutes!</li>
+                    </ol>
+                  </div>
+                )}
+
+                {/* HOSTINGER GUIDE */}
+                {activeRegistrarGuide === 'hostinger' && (
+                  <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 space-y-3 font-mono-luxury text-xs text-[#1a1a1a]">
+                    <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
+                      <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
+                      <span>How to Forward Your Purchased Domain on Hostinger</span>
+                    </div>
+
+                    <ol className="list-decimal list-inside space-y-2 text-[#1a1a1a]/80 pl-1 leading-relaxed">
+                      <li>Log in to <strong>Hostinger hPanel</strong>.</li>
+                      <li>Navigate to <strong>Domains</strong> and click <strong>Manage</strong> next to your domain.</li>
+                      <li>In the left menu, click <strong>Redirects</strong>.</li>
+                      <li>Under <strong>Create a Redirect</strong>:
+                        <ul className="list-disc list-inside pl-4 mt-1 space-y-1">
+                          <li><strong>Redirect from:</strong> Select your domain.</li>
+                          <li><strong>Redirect to:</strong> Enter <span className="font-bold text-blue-700">{PUBLIC_SHARED_APP_URL}</span>.</li>
+                          <li><strong>Type:</strong> Select <strong>Permanent (301)</strong>.</li>
+                        </ul>
+                      </li>
+                      <li>Click the <strong>Create</strong> button. Hostinger will activate the redirect within 5–15 minutes!</li>
+                    </ol>
+                  </div>
+                )}
+
+                {/* NAMECHEAP GUIDE */}
+                {activeRegistrarGuide === 'namecheap' && (
+                  <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 space-y-3 font-mono-luxury text-xs text-[#1a1a1a]">
+                    <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
+                      <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
+                      <span>How to Forward Your Purchased Domain on Namecheap</span>
+                    </div>
+
+                    <ol className="list-decimal list-inside space-y-2 text-[#1a1a1a]/80 pl-1 leading-relaxed">
+                      <li>Log in to your <strong>Namecheap Dashboard</strong>.</li>
+                      <li>Go to <strong>Domain List</strong> and click <strong>Manage</strong> next to your purchased domain.</li>
+                      <li>On the <strong>Domain</strong> tab, scroll down to the <strong>Redirect Domain</strong> section.</li>
+                      <li>Click <strong>Add Redirect</strong>.</li>
+                      <li><strong>Source URL:</strong> Enter your domain (e.g., <em>http://{savedPurchasedDomain || 'nsproperties.in'}</em>).</li>
+                      <li><strong>Destination URL:</strong> Enter <span className="font-bold text-blue-700">{PUBLIC_SHARED_APP_URL}</span>.</li>
+                      <li>Click the green checkmark <strong>Save changes</strong>.</li>
+                    </ol>
+                  </div>
+                )}
+
+                {/* BIGROCK GUIDE */}
+                {activeRegistrarGuide === 'bigrock' && (
+                  <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 space-y-3 font-mono-luxury text-xs text-[#1a1a1a]">
+                    <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
+                      <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
+                      <span>How to Forward Your Purchased Domain on BigRock</span>
+                    </div>
+
+                    <ol className="list-decimal list-inside space-y-2 text-[#1a1a1a]/80 pl-1 leading-relaxed">
+                      <li>Log in to your <strong>BigRock Control Panel</strong>.</li>
+                      <li>Go to <strong>Manage Orders &rarr; List/Search Orders</strong> and select your domain name.</li>
+                      <li>Click on <strong>Domain Forwarding</strong> on the right-hand side.</li>
+                      <li>Click <strong>Manage Domain Forwarding</strong>.</li>
+                      <li>Enter Destination URL: <span className="font-bold text-blue-700">{PUBLIC_SHARED_APP_URL}</span>.</li>
+                      <li>Enable <strong>URL Masking / Stealth Redirection</strong> if you want your domain to stay in the browser URL bar.</li>
+                      <li>Click <strong>Save</strong>.</li>
+                    </ol>
+                  </div>
+                )}
+
+                {/* CLOUDFLARE GUIDE */}
+                {activeRegistrarGuide === 'cloudflare' && (
+                  <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 space-y-3 font-mono-luxury text-xs text-[#1a1a1a]">
+                    <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
+                      <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
+                      <span>How to Set Up a True Custom Domain via Cloudflare (Free SSL & Retain URL)</span>
+                    </div>
+
+                    <p className="text-gray-600">
+                      Cloudflare lets you show your purchased domain (e.g., <em>www.nsproperties.in</em>) in your visitors' browser address bar with free SSL encryption and global DDoS protection.
+                    </p>
+
+                    <ol className="list-decimal list-inside space-y-2 text-[#1a1a1a]/80 pl-1 leading-relaxed">
+                      <li>Create a free account on <strong>Cloudflare.com</strong> and add your purchased domain.</li>
+                      <li>Point your domain registrar's nameservers to Cloudflare (as shown on Cloudflare screen).</li>
+                      <li>
+                        Go to <strong>DNS &rarr; Records</strong> and add:
+                        <div className="bg-white p-2.5 border border-[#1a1a1a]/30 my-1 font-mono-luxury text-[11px] space-y-1">
+                          <div><strong>Type:</strong> CNAME</div>
+                          <div><strong>Name:</strong> www</div>
+                          <div><strong>Target:</strong> ais-pre-iwndiyzigsglaztxgszw2g-775754830492.asia-southeast1.run.app</div>
+                          <div><strong>Proxy Status:</strong> Proxied (Orange cloud on)</div>
+                        </div>
+                      </li>
+                      <li>Go to <strong>Rules &rarr; Redirect Rules</strong> and create a rule to forward root domain (<em>{savedPurchasedDomain || 'nsproperties.in'}</em>) to <em>www.{savedPurchasedDomain || 'nsproperties.in'}</em>.</li>
+                      <li>Under <strong>SSL/TLS</strong>, ensure encryption mode is set to <strong>Full</strong>.</li>
+                    </ol>
+                  </div>
+                )}
+              </div>
+
+              {/* STEP 3: LIVE FORWARDING TESTER */}
+              <div className="border border-[#1a1a1a] bg-white p-5 space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-[#1a1a1a]/15">
+                  <h5 className="font-serif-luxury font-bold text-base text-[#1a1a1a]">
+                    Step 3: Test & Verify Your Forwarding Live
+                  </h5>
+                  <span className="text-[10px] text-gray-500 font-mono-luxury">
+                    Real-time verification
+                  </span>
+                </div>
+
+                <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div>
+                    <h6 className="font-serif-luxury font-bold text-sm text-[#1a1a1a]">
+                      Ready to check your purchased domain?
+                    </h6>
+                    <p className="text-xs text-[#1a1a1a]/70 font-mono-luxury mt-0.5">
+                      {savedPurchasedDomain
+                        ? `Click to test if https://${savedPurchasedDomain} forwards properly to your live website.`
+                        : 'Save your purchased domain above to run a live test.'}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleTestDomainForwarding}
+                    disabled={isTestingDomain || !savedPurchasedDomain}
+                    className="px-5 py-2.5 bg-[#1a1a1a] hover:bg-black text-[#c4a47c] border border-[#c4a47c] font-bold text-xs uppercase font-mono-luxury flex items-center gap-1.5 cursor-pointer disabled:opacity-50 transition-colors shrink-0"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>{isTestingDomain ? 'Testing...' : 'Test Purchased Domain →'}</span>
+                  </button>
+                </div>
+
+                {testDomainResult && (
+                  <div className="p-3 bg-blue-50 border border-blue-300 text-blue-900 text-xs font-mono-luxury">
+                    {testDomainResult}
+                  </div>
+                )}
+
+                {/* FAQ / TROUBLESHOOTING BOX */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                  <div className="border border-[#1a1a1a]/15 p-3 bg-white space-y-1 text-xs font-mono-luxury">
+                    <span className="font-bold text-[#1a1a1a] block">⏱️ How long does it take?</span>
+                    <p className="text-[#1a1a1a]/70 text-[11px] leading-relaxed">
+                      DNS propagation typically takes 5 to 30 minutes, though some providers can take up to 24 hours.
+                    </p>
+                  </div>
+
+                  <div className="border border-[#1a1a1a]/15 p-3 bg-white space-y-1 text-xs font-mono-luxury">
+                    <span className="font-bold text-[#1a1a1a] block">🔒 Is SSL included?</span>
+                    <p className="text-[#1a1a1a]/70 text-[11px] leading-relaxed">
+                      Yes! Your live destination URL automatically has Google Cloud SSL. Most registrars provide automatic HTTPS forwarding.
+                    </p>
+                  </div>
+
+                  <div className="border border-[#1a1a1a]/15 p-3 bg-white space-y-1 text-xs font-mono-luxury">
+                    <span className="font-bold text-[#1a1a1a] block">📱 Does Android PWA work?</span>
+                    <p className="text-[#1a1a1a]/70 text-[11px] leading-relaxed">
+                      Yes! When visitors open your purchased domain, the app prompts them to install NSProperties on their phone home screen.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

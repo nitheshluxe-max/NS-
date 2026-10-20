@@ -97,13 +97,13 @@ export const LeadCaptureModal: React.FC<LeadCaptureModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs overflow-y-auto animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-xs overflow-y-auto animate-in fade-in">
       <div 
         className="relative w-full max-w-lg bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] shadow-2xl overflow-hidden my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Banner */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-5 relative border-b border-[#1a1a1a]">
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-4 sm:py-5 relative border-b border-[#1a1a1a]">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-1.5 border border-white/20 hover:border-white text-white transition-colors cursor-pointer"
@@ -116,10 +116,10 @@ export const LeadCaptureModal: React.FC<LeadCaptureModalProps> = ({
             Private Consultation
           </span>
 
-          <h3 className="font-serif-luxury text-2xl sm:text-3xl font-bold tracking-tight">
+          <h3 className="font-serif-luxury text-xl sm:text-2xl font-bold tracking-tight">
             Curated Homes in {selectedCity}
           </h3>
-          <p className="editorial-label text-[#fdfcf9]/70 text-xs normal-case mt-1 max-w-sm">
+          <p className="editorial-label text-[#fdfcf9]/70 text-[11px] sm:text-xs normal-case mt-1 max-w-sm">
             Receive personalized price lists, verified brochures & direct owner deals directly to your WhatsApp and Email.
           </p>
         </div>
@@ -167,7 +167,7 @@ export const LeadCaptureModal: React.FC<LeadCaptureModalProps> = ({
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-4 bg-[#fdfcf9]">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3.5 sm:space-y-4 bg-[#fdfcf9]">
             {errorMessage && (
               <div className="p-2.5 font-mono-luxury text-xs text-red-700 bg-red-50 border border-red-200">
                 {errorMessage}

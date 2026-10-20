@@ -17,12 +17,12 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
-import { Property, PropertyPurpose, PropertyCategory, PropertyType, FurnishingStatus, PossessionStatus, PostedBy } from '../types';
+import { Property, PropertyPurpose, PropertyCategory, PropertyType, FurnishingStatus, PossessionStatus, PostedBy, PropertyPublishStatus } from '../types';
 import { formatIndianCurrency } from '../utils/formatters';
 
 interface PostPropertyModalProps {
   onClose: () => void;
-  onPropertyAdded: (newProperty: Property) => void;
+  onPropertyAdded: (newProperty: Property) => Promise<any> | void;
 }
 
 export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
@@ -30,6 +30,9 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
   onPropertyAdded
 }) => {
   const [purpose, setPurpose] = useState<PropertyPurpose>('buy');
+  const [status, setStatus] = useState<PropertyPublishStatus>('published');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState('');
   const [category, setCategory] = useState<PropertyCategory>('residential');
   const [propertyType, setPropertyType] = useState<PropertyType>('apartment');
   const [title, setTitle] = useState('');
@@ -137,13 +140,15 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !city || !locality || !price || !sellerName || !sellerPhone) {
-      alert('Please fill out all mandatory fields.');
+    setSubmissionError('');
+    if (!title.trim() || !city.trim() || !locality.trim() || !price || !sellerName.trim() || !sellerPhone.trim()) {
+      setSubmissionError('Please fill out all mandatory fields: Title, City, Locality, Price, Your Name, and Phone Number.');
       return;
     }
 
+    setIsSubmitting(true);
     const pricePerSqFt = areaSqFt > 0 ? Math.round(price / areaSqFt) : 0;
     const priceDisplay =
       purpose === 'rent'
@@ -152,8 +157,8 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
 
     const newProp: Property = {
       id: `prop-user-${Date.now()}`,
-      title,
-      projectName: projectName || title,
+      title: title.trim(),
+      projectName: (projectName || title).trim(),
       purpose,
       category,
       type: propertyType,
@@ -164,15 +169,17 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
       pricePerSqFt,
       areaSqFt,
       carpetAreaSqFt: carpetAreaSqFt || Math.round(areaSqFt * 0.8),
-      city,
-      locality,
-      address: `${locality}, ${city}`,
+      city: city.trim(),
+      locality: locality.trim(),
+      address: `${locality.trim()}, ${city.trim()}`,
       facing,
       furnishing,
       possession,
+      status,
       isVerified: true,
       isExclusive: false,
       isFeatured: true,
+      isDisabled: status === 'inactive',
       postedBy,
       postedDate: 'Just now',
       images: photoList.length > 0 ? photoList : presetPhotos.map((p) => p.url),
@@ -183,31 +190,38 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
         { name: 'Reputed Multi-Specialty Hospital', distance: '2.0 km', type: 'hospital' }
       ],
       seller: {
-        name: sellerName,
-        phone: sellerPhone,
+        name: sellerName.trim(),
+        phone: sellerPhone.trim(),
         email: 'seller@nsproperties.in',
         responseTime: 'Within 10 mins'
       }
     };
 
-    onPropertyAdded(newProp);
-    onClose();
+    try {
+      await onPropertyAdded(newProp);
+      onClose();
+    } catch (err: any) {
+      console.error('[PostPropertyModal] Submission failed:', err);
+      setSubmissionError(err?.message || 'Database error: Could not publish property to central database. Please retry.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/75 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 bg-black/75 backdrop-blur-xs overflow-y-auto">
       <div 
         className="relative w-full max-w-3xl bg-[#fdfcf9] border-[1.5px] border-[#1a1a1a] shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b border-[#1a1a1a]">
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b border-[#1a1a1a]">
           <div>
             <span className="editorial-badge bg-[#c4a47c] text-[#1a1a1a] border-0 text-[10px] mb-1 inline-block">
               Listing Submission
             </span>
-            <h2 className="font-serif-luxury text-2xl font-bold mt-1 text-white">List Asset on NS Properties</h2>
-            <p className="editorial-label text-[#fdfcf9]/70 text-xs normal-case">Direct presentation to verified high-net-worth investors and buyers</p>
+            <h2 className="font-serif-luxury text-xl sm:text-2xl font-bold mt-0.5 sm:mt-1 text-white">List Asset on NS Properties</h2>
+            <p className="editorial-label text-[#fdfcf9]/70 text-[11px] sm:text-xs normal-case">Direct presentation to verified high-net-worth investors and buyers</p>
           </div>
           <button
             onClick={onClose}
@@ -218,7 +232,7 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
         </div>
 
         {/* Scrollable Form Body */}
-        <form onSubmit={handleSubmit} className="overflow-y-auto p-6 space-y-6 text-[#1a1a1a] bg-[#fdfcf9]">
+        <form onSubmit={handleSubmit} className="overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6 text-[#1a1a1a] bg-[#fdfcf9]">
           {/* Purpose & Type */}
           <div className="space-y-3">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -728,22 +742,55 @@ export const PostPropertyModal: React.FC<PostPropertyModalProps> = ({
                 className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300"
               />
             </div>
+
+            {/* Publishing Status Selector */}
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <label className="text-xs font-bold text-amber-900 block mb-1">Publishing Target (Central Database):</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value as PropertyPublishStatus)}
+                className="w-full px-3 py-1.5 text-xs bg-white border border-amber-300 rounded font-mono-luxury"
+              >
+                <option value="published">🟢 Publish Live Immediately (Visible to all users on all devices)</option>
+                <option value="draft">🟡 Save as Draft (Hidden from visitors until published)</option>
+              </select>
+              <p className="text-[10px] text-amber-700 mt-1">
+                Published listings are synchronized permanently across all devices and web sessions.
+              </p>
+            </div>
           </div>
+
+          {/* Submission Error Banner */}
+          {submissionError && (
+            <div className="p-3 bg-red-50 border border-red-300 text-red-800 text-xs rounded-lg flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+              <span>{submissionError}</span>
+            </div>
+          )}
 
           {/* Submit Button */}
           <div className="pt-4 border-t border-[#1a1a1a]/20 flex items-center justify-end gap-3 font-mono-luxury">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs uppercase font-bold text-[#1a1a1a] hover:bg-[#1a1a1a]/5 cursor-pointer"
+              disabled={isSubmitting}
+              className="px-4 py-2 text-xs uppercase font-bold text-[#1a1a1a] hover:bg-[#1a1a1a]/5 cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] text-xs font-bold uppercase transition-colors cursor-pointer border border-[#1a1a1a]"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] text-xs font-bold uppercase transition-colors cursor-pointer border border-[#1a1a1a] disabled:opacity-50 flex items-center gap-2"
             >
-              Submit Property Listing
+              {isSubmitting ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Publishing to Central DB...</span>
+                </>
+              ) : (
+                <span>Publish to Central Database</span>
+              )}
             </button>
           </div>
         </form>

@@ -37,11 +37,14 @@ import {
   FileText,
   CheckCircle2,
   Eye,
-  ArrowRight
+  ArrowRight,
+  Laptop,
+  Globe
 } from 'lucide-react';
 import { TOP_CITIES } from '../data/properties';
 import { openWhatsAppChat, DEFAULT_CONTACT_PHONE, DISPLAY_CONTACT_PHONE } from '../utils/whatsapp';
 import { AppUserSession } from '../utils/appAuthService';
+import { AppProfileLogo } from './AppProfileLogo';
 
 interface HeaderProps {
   selectedCity: string;
@@ -70,6 +73,8 @@ interface HeaderProps {
   onOpenPlansModal?: () => void;
   onOpenOffers?: () => void;
   onOpenSettings?: () => void;
+  onOpenPlayStorePublish?: () => void;
+  onOpenDomainModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -98,7 +103,9 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectCategory,
   onOpenPlansModal,
   onOpenOffers,
-  onOpenSettings
+  onOpenSettings,
+  onOpenPlayStorePublish,
+  onOpenDomainModal
 }) => {
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -135,29 +142,29 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-40 bg-[#fdfcf9] border-b-[1.5px] border-[#1a1a1a]">
       {/* Top micro bar with Architectural Luxury styling */}
-      <div className="bg-[#1a1a1a] text-[#fdfcf9] py-2 px-4 sm:px-8 text-xs font-mono-luxury border-b border-black">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4 text-[11px] tracking-wider uppercase">
-            <span className="text-white/60">India's Trusted Property Network</span>
+      <div className="bg-[#1a1a1a] text-[#fdfcf9] py-1.5 sm:py-2 px-3 sm:px-6 lg:px-8 text-xs font-mono-luxury border-b border-black w-full overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] tracking-wider uppercase truncate">
+            <span className="text-white/60 truncate">India's Trusted Property Network</span>
             <span className="hidden sm:inline-block text-white/30">•</span>
-            <span className="text-[#c4a47c] font-bold">100% RERA Verified Listings</span>
+            <span className="text-[#c4a47c] font-bold hidden xs:inline-block">100% RERA Verified</span>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-5 text-[11px]">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-[11px] flex-wrap justify-end">
             <button 
               onClick={onOpenMarketTrends}
-              className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider flex items-center gap-1"
+              className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider hidden md:flex items-center gap-1"
             >
               <TrendingUp className="w-3 h-3 text-[#c4a47c]" />
-              <span className="hidden sm:inline">Price</span> Trends
+              <span>Trends</span>
             </button>
 
             <button 
               onClick={onOpenEmiCalc}
-              className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider flex items-center gap-1"
+              className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider hidden sm:flex items-center gap-1"
             >
               <Calculator className="w-3 h-3 text-[#c4a47c]" />
-              EMI Calc
+              <span>EMI</span>
             </button>
 
             <button
@@ -165,7 +172,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider flex items-center gap-1"
             >
               <CalendarCheck className="w-3 h-3 text-[#c4a47c]" />
-              Visits {scheduledVisitsCount > 0 && `(${scheduledVisitsCount})`}
+              <span>Visits {scheduledVisitsCount > 0 && `(${scheduledVisitsCount})`}</span>
             </button>
 
             <button
@@ -181,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={onOpenContactModal}
-              className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider hidden sm:flex items-center gap-1"
+              className="text-white/80 hover:text-white transition-colors cursor-pointer uppercase tracking-wider hidden lg:flex items-center gap-1"
             >
               <Phone className="w-3 h-3 text-[#c4a47c]" />
               <span>{DISPLAY_CONTACT_PHONE}</span>
@@ -196,15 +203,29 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Share</span>
             </button>
 
+            {/* Google Play Store Publishing & App Bundle Button */}
+            {onOpenPlayStorePublish && (
+              <button
+                onClick={onOpenPlayStorePublish}
+                className="bg-emerald-900/90 text-emerald-200 hover:text-white hover:bg-emerald-800 transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 px-2 py-0.5 border border-emerald-500/60 shadow-xs text-[10px]"
+                title="Google Play Store Publishing Console & .AAB Package Builder"
+              >
+                <Laptop className="w-2.5 h-2.5 text-emerald-400" />
+                <span className="hidden xs:inline">Play Store</span>
+                <span className="xs:hidden">App</span>
+              </button>
+            )}
+
             {/* Direct Gateway to Private Dashboards for Owner, Developer & Staff */}
             {!activeSession && (
               <button
                 onClick={() => onOpenAuthModal('private')}
-                className="text-[#c4a47c] hover:text-white transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 px-2.5 py-0.5 border border-[#c4a47c]/70 hover:border-[#c4a47c] bg-[#1a1a1a] shadow-xs text-[10px]"
+                className="text-[#c4a47c] hover:text-white transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 px-2 py-0.5 border border-[#c4a47c]/70 hover:border-[#c4a47c] bg-[#1a1a1a] shadow-xs text-[10px]"
                 title="Authorized Private Dashboards: Owner, Developer & Staff"
               >
                 <Lock className="w-2.5 h-2.5 text-[#c4a47c]" />
-                <span>Private Dashboards</span>
+                <span className="hidden sm:inline">Private Dashboards</span>
+                <span className="sm:hidden">Portals</span>
               </button>
             )}
 
@@ -212,33 +233,33 @@ export const Header: React.FC<HeaderProps> = ({
             {isOwner && onOpenOwnerConsole && (
               <button
                 onClick={onOpenOwnerConsole}
-                className="bg-[#c4a47c] text-black hover:bg-[#b09066] transition-colors cursor-pointer uppercase font-black tracking-wider flex items-center gap-1 px-2.5 py-0.5 border border-black shadow-xs"
+                className="bg-[#c4a47c] text-black hover:bg-[#b09066] transition-colors cursor-pointer uppercase font-black tracking-wider flex items-center gap-1 px-2 py-0.5 border border-black shadow-xs text-[10px]"
                 title="App Owner Master Console"
               >
                 <Crown className="w-3 h-3 text-black" />
-                <span>Owner Console</span>
+                <span className="hidden xs:inline">Owner</span> Console
               </button>
             )}
 
             {isDeveloper && onOpenDeveloperConsole && (
               <button
                 onClick={onOpenDeveloperConsole}
-                className="text-cyan-300 hover:text-white transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 bg-cyan-950/80 px-2 py-0.5 border border-cyan-500/50 hover:border-cyan-400"
+                className="text-cyan-300 hover:text-white transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 bg-cyan-950/80 px-2 py-0.5 border border-cyan-500/50 hover:border-cyan-400 text-[10px]"
                 title="Developer Technical Console"
               >
                 <Terminal className="w-2.5 h-2.5 text-cyan-400" />
-                <span>Dev Tech</span>
+                <span>Dev</span>
               </button>
             )}
 
             {isStaff && onOpenStaffConsole && (
               <button
                 onClick={onOpenStaffConsole}
-                className="text-emerald-300 hover:text-white transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 bg-emerald-950/80 px-2 py-0.5 border border-emerald-500/50 hover:border-emerald-400"
+                className="text-emerald-300 hover:text-white transition-colors cursor-pointer uppercase font-bold tracking-wider flex items-center gap-1 bg-emerald-950/80 px-2 py-0.5 border border-emerald-500/50 hover:border-emerald-400 text-[10px]"
                 title="Staff & Relationship Manager Dashboard"
               >
                 <Users className="w-2.5 h-2.5 text-emerald-400" />
-                <span>Staff CRM</span>
+                <span>Staff</span>
               </button>
             )}
           </div>
@@ -246,40 +267,40 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Main navigation header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 w-full">
         {/* Brand & City Selector */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <div 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-3 cursor-pointer select-none"
+            className="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0 group"
           >
-            <div className="font-mono-luxury bg-[#1a1a1a] text-[#fdfcf9] px-2.5 py-1.5 font-black text-sm tracking-widest uppercase border border-[#1a1a1a]">
-              NS
-            </div>
+            {/* 3D Architectural 4 App Profile Logo */}
+            <AppProfileLogo size="md" showGlow={true} className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:scale-105" />
+
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-serif-luxury text-2xl font-bold tracking-tight text-[#1a1a1a]">
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                <span className="font-serif-luxury text-lg sm:text-2xl font-bold tracking-tight text-[#1a1a1a] whitespace-nowrap">
                   NS Properties
                 </span>
-                <span className="font-mono-luxury text-[10px] text-[#c4a47c] font-bold tracking-widest uppercase border border-[#c4a47c]/50 px-1 py-0.2">
-                  PRO
+                <span className="font-mono-luxury text-[9px] sm:text-[10px] text-[#c4a47c] font-bold tracking-widest uppercase border border-[#c4a47c]/50 px-1 py-0.2 shrink-0">
+                  4 BHK & LUXE
                 </span>
               </div>
-              <p className="font-mono-luxury text-[9px] text-[#1a1a1a]/60 uppercase tracking-widest">
+              <p className="font-mono-luxury text-[8px] sm:text-[9px] text-[#1a1a1a]/60 uppercase tracking-widest hidden xs:block">
                 Search • Buy • Rent
               </p>
             </div>
           </div>
 
           {/* City Selector */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setCityDropdownOpen(!cityDropdownOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury text-[#1a1a1a] bg-[#fdfcf9] hover:bg-white border border-[#1a1a1a] cursor-pointer transition-colors"
+              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-mono-luxury text-[#1a1a1a] bg-[#fdfcf9] hover:bg-white border border-[#1a1a1a] cursor-pointer transition-colors"
             >
-              <MapPin className="w-3.5 h-3.5 text-[#c4a47c]" />
-              <span className="font-bold">{selectedCity}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#1a1a1a]/60" />
+              <MapPin className="w-3.5 h-3.5 text-[#c4a47c] shrink-0" />
+              <span className="font-bold truncate max-w-[80px] sm:max-w-none">{selectedCity}</span>
+              <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#1a1a1a]/60 shrink-0" />
             </button>
 
             {cityDropdownOpen && (
@@ -361,16 +382,16 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 shrink-0">
           {/* Special Offers & Deals */}
           {onOpenOffers && (
             <button
               onClick={onOpenOffers}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#c4a47c]/15 border border-[#c4a47c]/70 hover:border-[#c4a47c] transition-all cursor-pointer font-bold"
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#c4a47c]/15 border border-[#c4a47c]/70 hover:border-[#c4a47c] transition-all cursor-pointer font-bold"
               title="Exclusive Property Offers & Deals"
             >
               <Tag className="w-3.5 h-3.5 text-[#c4a47c]" />
-              <span className="hidden sm:inline">Offers</span>
+              <span className="hidden md:inline">Offers</span>
               <span className="bg-[#c4a47c] text-black text-[9px] px-1 py-0.2 font-black">DEALS</span>
             </button>
           )}
@@ -387,20 +408,33 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Google Play Store Console Trigger */}
+          {onOpenPlayStorePublish && (
+            <button
+              onClick={onOpenPlayStorePublish}
+              className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-emerald-50 border border-emerald-700/60 hover:border-emerald-700 transition-all cursor-pointer font-bold"
+              title="Google Play Store Publishing Console & .AAB Package Builder"
+            >
+              <Laptop className="w-3.5 h-3.5 text-emerald-700" />
+              <span>Google Play</span>
+            </button>
+          )}
+
           {/* Post Free Property Button */}
           <button
             onClick={onOpenPostProperty}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a] transition-all cursor-pointer"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a] transition-all cursor-pointer"
             title="Post Free Property Ad"
           >
             <PlusCircle className="w-3.5 h-3.5 text-[#c4a47c]" />
-            <span>Post Ad</span>
+            <span className="hidden md:inline">Post Ad</span>
+            <span className="md:hidden">Post</span>
           </button>
 
           {/* Compare Button */}
           <button
             onClick={onOpenCompare}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-transparent hover:border-[#1a1a1a]/20 transition-all cursor-pointer"
+            className="hidden sm:flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-transparent hover:border-[#1a1a1a]/20 transition-all cursor-pointer"
             title="Compare Properties"
           >
             <Scale className="w-3.5 h-3.5" />
@@ -415,7 +449,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Saved Properties (Shortlist) */}
           <button
             onClick={onOpenSaved}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-transparent hover:border-[#1a1a1a]/20 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-transparent hover:border-[#1a1a1a]/20 transition-all cursor-pointer"
             title="Saved Properties"
           >
             <Heart className={`w-3.5 h-3.5 ${savedCount > 0 ? 'text-red-600 fill-red-600' : ''}`} />
@@ -430,11 +464,11 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Contact NS Properties */}
           <button
             onClick={onOpenContactModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/30 hover:border-[#1a1a1a] transition-all cursor-pointer"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/30 hover:border-[#1a1a1a] transition-all cursor-pointer"
             title="Contact NS Properties"
           >
             <Phone className="w-3.5 h-3.5 text-[#c4a47c]" />
-            <span className="hidden sm:inline">Contact NS</span>
+            <span>Contact NS</span>
           </button>
 
           {/* ========================================================================= */}
@@ -442,7 +476,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Provides seamless user navigation for logged-in users and guests. */}
           {/* ========================================================================= */}
           <div className="relative" ref={userMenuRef}>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5">
               {/* Direct Console Shortcut for Authorized Roles */}
               {isOwner && onOpenOwnerConsole && (
                 <button
@@ -482,7 +516,7 @@ export const Header: React.FC<HeaderProps> = ({
                 /* Logged In User Button */
                 <button
                   onClick={() => setUserMenuOpen((prev) => !prev)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-xs font-mono-luxury bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs font-mono-luxury bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
                   title="Open User Navigation Menu"
                   aria-expanded={userMenuOpen}
                 >
@@ -491,15 +525,15 @@ export const Header: React.FC<HeaderProps> = ({
                     {activeSession.name ? activeSession.name.charAt(0).toUpperCase() : 'U'}
                   </div>
                   <span className="hidden sm:inline font-bold">User Menu</span>
-                  <span className="truncate max-w-[90px] text-gray-300">({activeSession.name.split(' ')[0]})</span>
+                  <span className="truncate max-w-[70px] sm:max-w-[90px] text-gray-300">({activeSession.name.split(' ')[0]})</span>
                   <ChevronDown className={`w-3.5 h-3.5 text-gray-300 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
               ) : (
                 /* Guest / Logged Out User Menu Button */
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 sm:gap-1.5">
                   <button
                     onClick={() => onOpenAuthModal('public')}
-                    className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
+                    className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
                     title="Sign In or Register"
                   >
                     <User className="w-3.5 h-3.5 text-[#c4a47c]" />
@@ -508,12 +542,12 @@ export const Header: React.FC<HeaderProps> = ({
 
                   <button
                     onClick={() => setUserMenuOpen((prev) => !prev)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-white hover:bg-gray-100 text-[#1a1a1a] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs"
+                    className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase bg-white hover:bg-gray-100 text-[#1a1a1a] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs"
                     title="Open User Navigation Menu"
                     aria-expanded={userMenuOpen}
                   >
                     <Menu className="w-3.5 h-3.5 text-[#1a1a1a]" />
-                    <span className="font-bold">User Menu</span>
+                    <span className="font-bold text-xs">Menu</span>
                     <ChevronDown className={`w-3 h-3 text-gray-600 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
@@ -940,6 +974,22 @@ export const Header: React.FC<HeaderProps> = ({
                         <span>Change Password & Security</span>
                       </button>
                     </>
+                  )}
+
+                  {onOpenPlayStorePublish && (
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        onOpenPlayStorePublish();
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 hover:bg-emerald-50 flex items-center justify-between cursor-pointer transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Laptop className="w-3.5 h-3.5 text-emerald-700" />
+                        <span className="font-bold text-emerald-950">Google Play Store Console (.AAB)</span>
+                      </span>
+                      <span className="text-[9px] bg-emerald-700 text-white px-1.5 py-0.2 font-bold">ANDROID</span>
+                    </button>
                   )}
 
                   <button

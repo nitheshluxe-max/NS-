@@ -1,24 +1,88 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="nsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#005CA8"/>
-      <stop offset="100%" stop-color="#003B73"/>
+    <radialGradient id="iconRoyalBg" cx="50%" cy="46%" r="72%">
+      <stop offset="0%" stop-color="#0856f6"/>
+      <stop offset="55%" stop-color="#0047e0"/>
+      <stop offset="100%" stop-color="#0035b8"/>
+    </radialGradient>
+    <linearGradient id="iconFrameBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="35%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
     </linearGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F59E0B"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="iconFrameWall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#0f2b82"/>
     </linearGradient>
+    <linearGradient id="iconBldgRoof" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="iconGrass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+    <filter id="iconGlow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#001859" flood-opacity="0.8"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#002b99" flood-opacity="0.4"/>
+    </filter>
   </defs>
-  <rect width="512" height="512" rx="110" fill="url(#nsGrad)"/>
-  <!-- Modern Building Skyline Silhouette -->
-  <path d="M120 370 V240 L190 190 V370 Z" fill="#ffffff" opacity="0.2"/>
-  <path d="M190 370 V150 L270 110 V370 Z" fill="#ffffff" opacity="0.3"/>
-  <path d="M270 370 V180 L350 140 V370 Z" fill="#ffffff" opacity="0.2"/>
-  <!-- NS Monogram & House Roof Shape -->
-  <path d="M140 250 L256 160 L372 250" stroke="url(#goldGrad)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <circle cx="256" cy="130" r="16" fill="url(#goldGrad)"/>
-  
-  <!-- Text NS -->
-  <text x="256" y="340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="120" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">NS</text>
-  <text x="256" y="405" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="700" fill="#FDE68A" text-anchor="middle" letter-spacing="8">PROPERTIES</text>
+
+  <rect width="512" height="512" fill="url(#iconRoyalBg)"/>
+
+  <!-- 3D Architectural "4" Estate Icon -->
+  <g filter="url(#iconGlow)" transform="matrix(0.53 0 0 0.53 45 36)">
+    <!-- 3D Shadow/Depth -->
+    <path d="M 400 95 L 545 95 L 545 490 L 650 490 L 650 600 L 545 600 L 545 745 L 405 745 L 405 600 L 155 600 L 155 465 L 400 95 Z" 
+          fill="url(#iconFrameWall)" transform="translate(0, 16)"/>
+
+    <!-- Main Outer Blue Frame -->
+    <path d="M 400 95 L 545 95 L 545 490 L 650 490 L 650 600 L 545 600 L 545 745 L 405 745 L 405 600 L 155 600 L 155 465 L 400 95 Z" 
+          fill="url(#iconFrameBlue)" stroke="#93c5fd" stroke-width="7" stroke-linejoin="round"/>
+
+    <!-- Inner Void of the 4 -->
+    <path d="M 425 240 L 425 490 L 275 490 Z" fill="#002277" stroke="#1d4ed8" stroke-width="8" stroke-linejoin="round"/>
+
+    <!-- Roads & Courtyard Bases -->
+    <rect x="425" y="115" width="100" height="610" fill="#334155"/>
+    <rect x="175" y="505" width="455" height="75" fill="#334155"/>
+
+    <!-- White High-Rise Tower Blocks -->
+    <path d="M 445 120 L 525 120 L 525 230 L 485 230 L 485 160 L 445 160 Z" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2"/>
+    <rect x="360" y="210" width="45" height="95" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2" transform="rotate(-40, 390, 240)"/>
+    <rect x="280" y="310" width="45" height="95" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2" transform="rotate(-40, 310, 340)"/>
+    <rect x="200" y="410" width="45" height="85" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2" transform="rotate(-40, 230, 440)"/>
+
+    <!-- Mid Vertical Block -->
+    <rect x="490" y="330" width="38" height="130" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2"/>
+
+    <!-- Bottom Left Block -->
+    <path d="M 175 515 L 275 515 L 275 550 L 210 550 L 210 580 L 175 580 Z" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- Bottom Center Block -->
+    <rect x="295" y="520" width="105" height="45" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- Bottom Right Enclosure -->
+    <rect x="545" y="515" width="85" height="65" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2"/>
+    <rect x="565" y="530" width="45" height="35" rx="2" fill="url(#iconGrass)" stroke="#ca8a04" stroke-width="2"/>
+    <!-- Lower Stem Tower -->
+    <rect x="455" y="555" width="35" height="75" rx="3" fill="url(#iconBldgRoof)" stroke="#cbd5e1" stroke-width="2"/>
+
+    <!-- Central Garden Boulevard with Oval Running Track -->
+    <rect x="445" y="270" width="32" height="200" rx="16" fill="url(#iconGrass)" stroke="#16a34a" stroke-width="2"/>
+    <rect x="450" y="280" width="22" height="180" rx="11" fill="none" stroke="#facc15" stroke-width="3"/>
+    <circle cx="461" cy="310" r="5" fill="#38bdf8"/>
+    <circle cx="461" cy="370" r="5" fill="#38bdf8"/>
+    <circle cx="461" cy="430" r="5" fill="#38bdf8"/>
+
+    <!-- Trees & Greenery -->
+    <circle cx="340" cy="470" r="7" fill="#22c55e"/>
+    <circle cx="370" cy="470" r="7" fill="#15803d"/>
+    <circle cx="400" cy="470" r="8" fill="#22c55e"/>
+    <circle cx="280" cy="470" r="7" fill="#15803d"/>
+    <circle cx="310" cy="470" r="7" fill="#22c55e"/>
+
+    <!-- Lower Leg Promenade -->
+    <rect x="445" y="650" width="40" height="70" rx="20" fill="url(#iconGrass)"/>
+    <circle cx="465" cy="670" r="10" fill="#1e293b" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="465" cy="670" r="5" fill="#facc15"/>
+  </g>
 </svg>

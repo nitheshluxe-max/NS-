@@ -1,4 +1,4 @@
-import { Offer, SubscriptionPlan, OfferEnquiry, OfferActivityLog } from '../types';
+import { Offer, SubscriptionPlan, OfferEnquiry, OfferActivityLog } from '../types.ts';
 
 export const INITIAL_OFFERS: Offer[] = [
   {

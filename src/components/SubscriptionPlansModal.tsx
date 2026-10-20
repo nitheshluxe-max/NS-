@@ -75,27 +75,27 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-xs overflow-y-auto">
       <div 
         className="relative w-full max-w-5xl bg-[#fdfcf9] border-2 border-[#1a1a1a] shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col font-mono-luxury"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Bar */}
-        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-6 py-4 flex items-center justify-between border-b-2 border-[#c4a47c]">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#c4a47c] text-black font-black flex items-center justify-center text-xs">
-              <Crown className="w-5 h-5 text-black" />
+        <div className="bg-[#1a1a1a] text-[#fdfcf9] px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border-b-2 border-[#c4a47c] gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-[#c4a47c] text-black font-black flex items-center justify-center text-xs shrink-0">
+              <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-serif-luxury text-lg sm:text-xl font-bold tracking-tight text-white">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <h3 className="font-serif-luxury text-base sm:text-xl font-bold tracking-tight text-white truncate">
                   NS Partner Membership & Subscription Plans
                 </h3>
-                <span className="bg-[#c4a47c] text-black text-[9px] font-black px-2 py-0.5 uppercase tracking-wider shrink-0">
-                  AGENT, DEVELOPER & BUILDER NETWORK
+                <span className="bg-[#c4a47c] text-black text-[8px] sm:text-[9px] font-black px-1.5 sm:px-2 py-0.5 uppercase tracking-wider shrink-0">
+                  NETWORK
                 </span>
               </div>
-              <p className="text-[11px] text-[#c4a47c] mt-0.5">
+              <p className="text-[10px] sm:text-[11px] text-[#c4a47c] mt-0.5 truncate">
                 100% Free Site Visits, instant builder offer deal publication, and verified client leads.
               </p>
             </div>
