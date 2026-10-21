@@ -2234,10 +2234,10 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
                 {/* Registrar Selector Tabs */}
                 <div className="flex flex-wrap gap-1.5 border-b border-[#1a1a1a]/20 pb-2">
                   {[
+                    { id: 'bigrock', label: 'BigRock (Your Domain)' },
                     { id: 'godaddy', label: 'GoDaddy' },
                     { id: 'hostinger', label: 'Hostinger' },
                     { id: 'namecheap', label: 'Namecheap' },
-                    { id: 'bigrock', label: 'BigRock' },
                     { id: 'cloudflare', label: 'Cloudflare (Free Custom SSL)' }
                   ].map((reg) => (
                     <button
@@ -2327,21 +2327,53 @@ export const OwnerMasterConsole: React.FC<OwnerMasterConsoleProps> = ({
 
                 {/* BIGROCK GUIDE */}
                 {activeRegistrarGuide === 'bigrock' && (
-                  <div className="p-4 bg-[#fdfcf9] border border-[#1a1a1a]/20 space-y-3 font-mono-luxury text-xs text-[#1a1a1a]">
-                    <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
-                      <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
-                      <span>How to Forward Your Purchased Domain on BigRock</span>
+                  <div className="p-4 bg-[#fdfcf9] border-2 border-[#1a1a1a] space-y-4 font-mono-luxury text-xs text-[#1a1a1a]">
+                    <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-[#1a1a1a]/15">
+                      <div className="flex items-center gap-2 text-sm font-bold font-serif-luxury text-[#1a1a1a]">
+                        <span className="w-6 h-6 rounded-full bg-[#1a1a1a] text-white flex items-center justify-center text-xs">1</span>
+                        <span>BigRock Setup for nsproperties4.com (Click-by-Click)</span>
+                      </div>
+                      <span className="px-2 py-0.5 bg-[#c4a47c] text-black font-bold text-[10px] uppercase">
+                        Recommended Method
+                      </span>
                     </div>
 
-                    <ol className="list-decimal list-inside space-y-2 text-[#1a1a1a]/80 pl-1 leading-relaxed">
-                      <li>Log in to your <strong>BigRock Control Panel</strong>.</li>
-                      <li>Go to <strong>Manage Orders &rarr; List/Search Orders</strong> and select your domain name.</li>
-                      <li>Click on <strong>Domain Forwarding</strong> on the right-hand side.</li>
-                      <li>Click <strong>Manage Domain Forwarding</strong>.</li>
-                      <li>Enter Destination URL: <span className="font-bold text-blue-700">{PUBLIC_SHARED_APP_URL}</span>.</li>
-                      <li>Enable <strong>URL Masking / Stealth Redirection</strong> if you want your domain to stay in the browser URL bar.</li>
+                    <ol className="list-decimal list-inside space-y-2.5 text-[#1a1a1a]/85 pl-1 leading-relaxed">
+                      <li>Log in to your <strong><a href="https://www.bigrock.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 underline font-bold">BigRock Account (bigrock.in)</a></strong>.</li>
+                      <li>In the top menu bar, click <strong>Manage Orders &rarr; List/Search Orders</strong>.</li>
+                      <li>In the list of domain names, click directly on <strong>nsproperties4.com</strong>.</li>
+                      <li>On the right side of the domain details page, look for the <strong>Domain Forwarding</strong> section and click <strong>Manage Domain Forwarding</strong> (or <em>Activate Domain Forwarding</em>).</li>
+                      <li>
+                        In the <strong>Destination URL</strong> field, paste this exact target address:
+                        <div className="flex items-center gap-2 my-1.5">
+                          <div className="flex-1 bg-white p-2 border border-[#1a1a1a] font-bold text-[11px] select-all truncate">
+                            {PUBLIC_SHARED_APP_URL}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleCopyTargetUrl}
+                            className="px-3 py-2 bg-[#1a1a1a] text-[#c4a47c] font-bold text-[10px] uppercase cursor-pointer hover:bg-black shrink-0 flex items-center gap-1"
+                          >
+                            {copiedTargetUrl ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                            <span>{copiedTargetUrl ? 'Copied' : 'Copy'}</span>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <strong>URL Masking / Stealth Redirection:</strong> Check the box for <strong>Enable URL Masking</strong> (this keeps <em>nsproperties4.com</em> visible in your visitors' browser address bar).
+                      </li>
+                      <li>
+                        <strong>Page Title:</strong> Enter <span className="font-bold text-[#1a1a1a]">NSProperties | Luxury Real Estate</span>.
+                      </li>
+                      <li>
+                        <strong>Subdomain Forwarding:</strong> Ensure <em>www.nsproperties4.com</em> is also forwarded to the same target.
+                      </li>
                       <li>Click <strong>Save</strong>.</li>
                     </ol>
+
+                    <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-900 text-[11px] leading-relaxed">
+                      <strong>✓ Done!</strong> BigRock will now route anyone typing <em>nsproperties4.com</em> directly to your live portal. DNS activation usually takes 10 to 30 minutes.
+                    </div>
                   </div>
                 )}
 

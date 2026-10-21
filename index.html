@@ -9,29 +9,218 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="NSProperties" />
+
+    <!-- Favicons & App Icons -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/app-profile-4.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/pwa-512x512.png" />
     <link rel="manifest" href="/manifest.json" />
+
+    <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>NSProperties | Luxury Real Estate</title>
-    <meta name="description" content="Comprehensive Indian property search, buying, renting, and listing portal by NS Properties with verified homes, EMI calculator, project insights, and comparison." />
+
+    <!-- Primary SEO Metadata -->
+    <title>NSProperties | Luxury Real Estate & Verified Homes in India</title>
+    <meta name="description" content="Discover verified luxury residential apartments, villas, and premium plots across India with NS Properties. Verified RERA listings, direct owner deals, and EMI calculator." />
+    <meta name="keywords" content="NS Properties, real estate india, luxury apartments bangalore, luxury flats mumbai, rera verified properties, buy flat india, nsproperties4.com" />
+    <meta name="author" content="NS Properties" />
     <link rel="canonical" href="https://nsproperties4.com/" />
-    <meta property="og:title" content="NS Properties" />
-    <meta property="og:description" content="Comprehensive Indian property search, buying, renting, and listing portal by NS Properties with verified homes, EMI calculator, project insights, and comparison." />
-    <meta property="og:url" content="https://nsproperties4.com/" />
+
+    <!-- Open Graph (Facebook / WhatsApp / LinkedIn) -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NS Properties" />
+    <meta property="og:title" content="NSProperties | Luxury Real Estate & Verified Homes in India" />
+    <meta property="og:description" content="Discover verified luxury apartments, villas, and penthouses across Bengaluru, Mumbai, Delhi-NCR, and Hyderabad with NS Properties." />
+    <meta property="og:url" content="https://nsproperties4.com/" />
     <meta property="og:image" content="/play-store-feature-graphic.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NSProperties | Luxury Real Estate & Verified Homes in India" />
+    <meta name="twitter:description" content="Discover verified luxury apartments, villas, and penthouses across Bengaluru, Mumbai, Delhi-NCR, and Hyderabad with NS Properties." />
     <meta name="twitter:image" content="/play-store-feature-graphic.svg" />
+
+    <!-- Android App Linking -->
     <meta name="google-play-app" content="app-id=in.nsproperties.app" />
+
+    <!-- Schema.org JSON-LD Structured Data for Real Estate -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "name": "NS Properties",
+      "url": "https://nsproperties4.com",
+      "logo": "https://nsproperties4.com/pwa-512x512.png",
+      "image": "https://nsproperties4.com/play-store-feature-graphic.svg",
+      "description": "Comprehensive Indian luxury real estate search, buying, renting, and verified property listing portal.",
+      "telephone": "+91-98450-12345",
+      "email": "contact@nsproperties4.com",
+      "priceRange": "₹45 Lakhs - ₹35 Crores",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "addressCountry": "IN"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://nsproperties4.com/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="bg-[#fdfcf9] text-[#1a1a1a] antialiased m-0 p-0 selection:bg-[#c4a47c] selection:text-black">
+    <!-- App Root Container -->
+    <div id="root">
+      <!-- Semantic Server & Crawler HTML Skeleton (Hydrated by React on load) -->
+      <div id="initial-pre-render" style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column;">
+        
+        <!-- Top Micro Bar -->
+        <div style="background-color: #1a1a1a; color: #fdfcf9; padding: 6px 16px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000;">
+          <div style="letter-spacing: 0.05em; text-transform: uppercase;">
+            <span style="opacity: 0.7;">India's Trusted Property Network</span> • 
+            <span style="color: #c4a47c; font-weight: 700;">100% RERA Verified</span>
+          </div>
+          <div style="text-transform: uppercase; letter-spacing: 0.05em;">
+            <span>Official Domain: <strong>nsproperties4.com</strong></span>
+          </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <header style="background-color: #fdfcf9; border-bottom: 1.5px solid #1a1a1a; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; background-color: #0047E0; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 18px;">
+              NS
+            </div>
+            <div>
+              <h1 style="margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; font-family: 'Playfair Display', serif;">
+                NS PROPERTIES
+              </h1>
+              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #666;">
+                Luxury Real Estate Portfolio
+              </span>
+            </div>
+          </div>
+
+          <nav style="display: flex; gap: 20px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+            <a href="#properties" style="color: #1a1a1a; text-decoration: none;">Buy</a>
+            <a href="#properties" style="color: #1a1a1a; text-decoration: none;">Rent</a>
+            <a href="#trends" style="color: #1a1a1a; text-decoration: none;">Trends</a>
+            <a href="#emi" style="color: #1a1a1a; text-decoration: none;">EMI Calculator</a>
+            <a href="#contact" style="color: #1a1a1a; text-decoration: none;">Contact</a>
+          </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <main style="flex: 1;">
+          <section style="background: linear-gradient(180deg, #f7f5f0 0%, #ffffff 100%); padding: 60px 24px; text-align: center; border-bottom: 1px solid #eae6de;">
+            <div style="max-width: 900px; margin: 0 auto;">
+              <span style="background-color: #1a1a1a; color: #c4a47c; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; padding: 4px 12px; display: inline-block; margin-bottom: 16px;">
+                Verified Luxury Residences & Commercial Estates
+              </span>
+              <h2 style="font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 800; line-height: 1.15; color: #1a1a1a; margin: 0 0 16px 0;">
+                Architectural Masterpieces Across India
+              </h2>
+              <p style="font-size: 16px; color: #555; max-width: 680px; margin: 0 auto 32px auto; line-height: 1.6;">
+                Handpicked premium apartments, penthouses, and gated villas in Bengaluru, Mumbai, Delhi-NCR, and Hyderabad with zero brokerage direct deals.
+              </p>
+
+              <!-- Quick Search Box Placeholder -->
+              <div style="background-color: #ffffff; border: 1.5px solid #1a1a1a; padding: 18px; max-width: 780px; margin: 0 auto; box-shadow: 4px 4px 0px #1a1a1a; display: flex; gap: 12px; flex-wrap: wrap;">
+                <input type="text" placeholder="Enter City, Locality or Project (e.g. Indiranagar, Whitefield)" style="flex: 1; min-width: 260px; padding: 10px 14px; border: 1px solid #1a1a1a; font-size: 13px; outline: none;" />
+                <button type="button" style="background-color: #1a1a1a; color: #c4a47c; border: none; padding: 10px 24px; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; cursor: pointer;">
+                  Search Properties
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Featured Showcase Preview -->
+          <section style="max-width: 1200px; margin: 0 auto; padding: 48px 24px;" id="properties">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 12px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #c4a47c; letter-spacing: 0.1em; display: block;">Curated Residences</span>
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin: 4px 0 0 0; color: #1a1a1a;">
+                  Featured Luxury Properties
+                </h3>
+              </div>
+              <span style="font-size: 12px; color: #666; font-weight: 600;">100% RERA Registered</span>
+            </div>
+
+            <!-- Property Preview Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+              <article style="border: 1px solid #1a1a1a; background: #fff; padding: 16px;">
+                <div style="height: 180px; background-color: #eee; background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; margin-bottom: 12px;"></div>
+                <div style="font-size: 11px; text-transform: uppercase; color: #0047E0; font-weight: 700;">Bengaluru • Indiranagar</div>
+                <h4 style="margin: 4px 0 8px 0; font-size: 16px; font-weight: 700;">The Imperial Crest (4 BHK Sky Villa)</h4>
+                <div style="font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">₹ 4.85 Cr</div>
+                <div style="font-size: 12px; color: #777;">3,850 sq.ft • Private Pool • 100% Vastu</div>
+              </article>
+
+              <article style="border: 1px solid #1a1a1a; background: #fff; padding: 16px;">
+                <div style="height: 180px; background-color: #eee; background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; margin-bottom: 12px;"></div>
+                <div style="font-size: 11px; text-transform: uppercase; color: #0047E0; font-weight: 700;">Mumbai • Altamount Road</div>
+                <h4 style="margin: 4px 0 8px 0; font-size: 16px; font-weight: 700;">Lodha Altamount Sea View (3 BHK)</h4>
+                <div style="font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">₹ 12.50 Cr</div>
+                <div style="font-size: 12px; color: #777;">2,450 sq.ft • Arabian Sea View • Italian Marble</div>
+              </article>
+
+              <article style="border: 1px solid #1a1a1a; background: #fff; padding: 16px;">
+                <div style="height: 180px; background-color: #eee; background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; margin-bottom: 12px;"></div>
+                <div style="font-size: 11px; text-transform: uppercase; color: #0047E0; font-weight: 700;">Gurugram • Golf Course Road</div>
+                <h4 style="margin: 4px 0 8px 0; font-size: 16px; font-weight: 700;">The Camellias Penthouse (5 BHK)</h4>
+                <div style="font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">₹ 21.00 Cr</div>
+                <div style="font-size: 12px; color: #777;">7,400 sq.ft • Golf Course View • Concierge</div>
+              </article>
+            </div>
+          </section>
+        </main>
+
+        <!-- Footer -->
+        <footer style="background-color: #1a1a1a; color: #fdfcf9; padding: 36px 24px; font-size: 12px; border-top: 1.5px solid #1a1a1a; margin-top: auto;">
+          <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
+            <div>
+              <div style="font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #c4a47c; margin-bottom: 6px;">
+                NS PROPERTIES
+              </div>
+              <p style="color: #999; max-width: 320px; margin: 0 0 10px 0; line-height: 1.5;">
+                India's premier verified real estate network for luxury properties, floor plans, and verified owner direct connections.
+              </p>
+              <div style="color: #bbb;">Domain: <strong>nsproperties4.com</strong></div>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: #fff;">Contact & Office</div>
+              <div style="color: #999; line-height: 1.7;">
+                <div>Phone: +91 98450 12345</div>
+                <div>Email: contact@nsproperties4.com</div>
+                <div>Bengaluru • Mumbai • Delhi-NCR • Hyderabad</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="max-width: 1200px; margin: 24px auto 0 auto; padding-top: 16px; border-top: 1px solid #333; display: flex; justify-content: space-between; color: #777; font-size: 11px; flex-wrap: wrap; gap: 8px;">
+            <div>© 2026 NS Properties. All rights reserved. RERA Compliant.</div>
+            <div>Official Portal: https://nsproperties4.com</div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- NoScript Fallback -->
+    <noscript>
+      <div style="padding: 16px; background-color: #fef2f2; border: 1px solid #f87171; color: #991b1b; text-align: center; font-family: sans-serif; font-size: 14px;">
+        JavaScript is currently disabled in your browser. While basic property details are viewable above, enable JavaScript to use interactive search, EMI calculators, and virtual tours.
+      </div>
+    </noscript>
+
+    <!-- Main React Application Script -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

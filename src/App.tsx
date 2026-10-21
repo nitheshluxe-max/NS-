@@ -22,7 +22,8 @@ import {
   Phone,
   Lock,
   AlertTriangle,
-  Laptop
+  Laptop,
+  FileCode2
 } from 'lucide-react';
 import { 
   Property, 
@@ -1396,6 +1397,12 @@ export default function App() {
                 <li>
                   <button onClick={() => setIsDownloadModalOpen(true)} className="hover:text-[#c4a47c] cursor-pointer font-bold text-[#1a1a1a]">
                     Download &amp; Install App (PWA)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => setIsDownloadModalOpen(true)} className="hover:text-blue-800 cursor-pointer font-bold text-blue-900 bg-blue-50 border border-blue-200 px-2 py-1 flex items-center gap-1.5 w-full text-left">
+                    <FileCode2 className="w-3.5 h-3.5 text-blue-700 shrink-0" />
+                    <span>Download App Source Code (.ZIP)</span>
                   </button>
                 </li>
                 <li>

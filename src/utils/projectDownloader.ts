@@ -10,7 +10,8 @@ const sourceFiles = import.meta.glob(
     '/vite.config.ts',
     '/tsconfig.json',
     '/metadata.json',
-    '/.env.example'
+    '/.env.example',
+    '/server.ts'
   ],
   {
     query: '?raw',

@@ -39,7 +39,8 @@ import {
   Eye,
   ArrowRight,
   Laptop,
-  Globe
+  Globe,
+  FileCode2
 } from 'lucide-react';
 import { TOP_CITIES } from '../data/properties';
 import { openWhatsAppChat, DEFAULT_CONTACT_PHONE, DISPLAY_CONTACT_PHONE } from '../utils/whatsapp';
@@ -1004,6 +1005,20 @@ export const Header: React.FC<HeaderProps> = ({
                       <span>Install App on Device (PWA)</span>
                     </span>
                     <span className="text-[9px] bg-black text-white px-1.5 py-0.2 font-bold">APP</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onOpenDownloadModal();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-[#1a1a1a]/5 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <FileCode2 className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Download App Code (.ZIP)</span>
+                    </span>
+                    <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 font-bold">CODE</span>
                   </button>
 
                   <button
