@@ -99,17 +99,27 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         body: JSON.stringify({ identifier: trimmed })
       });
 
-      const data = await response.json();
-      const code = data?.otp || Math.floor(100000 + Math.random() * 900000).toString();
+      let code = '';
+      if (response.ok) {
+        try {
+          const data = await response.json();
+          code = data?.otp || '';
+        } catch {
+          // Response was not JSON
+        }
+      }
+      if (!code) {
+        code = Math.floor(100000 + Math.random() * 900000).toString();
+      }
       setGeneratedOtp(code);
-      setOtpInput('');
+      setOtpInput(code); // Immediately auto-fill so user doesn't have to manually copy
       setIsOtpSent(true);
       setResendTimer(30);
 
       if (isEmail) {
-        setSuccessMessage(`OTP code dispatched to ${trimmed}. Check inbox/spam or use instant code below.`);
+        setSuccessMessage(`OTP code ${code} generated for ${trimmed}. Click "Verify OTP & Continue" to login.`);
       } else {
-        setSuccessMessage(`SMS request dispatched to ${trimmed}. Instant code and WhatsApp option available below.`);
+        setSuccessMessage(`OTP code ${code} generated for ${trimmed}. Click "Verify OTP & Continue" to login.`);
       }
 
       // Countdown timer for resend
@@ -123,10 +133,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         });
       }, 1000);
     } catch {
-      // Fallback in case of temporary network drop
+      // Fallback in case of static hosting / network drop
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       setGeneratedOtp(code);
-      setOtpInput('');
+      setOtpInput(code);
       setIsOtpSent(true);
       setResendTimer(30);
       setSuccessMessage(`Verification OTP code generated: ${code}`);
@@ -163,53 +173,79 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     e.preventDefault();
     setErrorMessage('');
 
-    // If in OTP mode and OTP was sent, verify code
-    if (authMethod === 'otp') {
-      if (!isOtpSent) {
-        setErrorMessage('Please click "Send Verification OTP" to generate your code.');
-        return;
-      }
-      if (otpInput.trim() !== generatedOtp) {
-        setErrorMessage(`Invalid OTP entered. Please enter ${generatedOtp} or click "Auto-fill Code".`);
-        return;
-      }
+    const trimmedInput = userIdentifier.trim();
+    if (!trimmedInput) {
+      setErrorMessage('Please enter your Mobile Number, Email Address or Master PIN.');
+      return;
     }
 
     setIsLoading(true);
 
     try {
-      // Smart Authorization detection for Owner, Developer, Staff
-      const trimmedInput = userIdentifier.trim();
-      if (trimmedInput === '1984' || trimmedInput.toLowerCase() === 'nitheshluxe@gmail.com' || trimmedInput === '9845012345') {
-        const res = await loginOwner('1984');
+      // 1. FIRST: Smart Authorization detection for Owner, Developer, Staff
+      // MUST run first so entering 1984 or Owner Email immediately logs in without OTP block!
+      const cleanPhone = trimmedInput.replace(/\D/g, '');
+      if (
+        trimmedInput === '1984' || 
+        trimmedInput.toLowerCase() === 'nitheshluxe@gmail.com' || 
+        userPassword === '1984' ||
+        cleanPhone === '9845012345' || 
+        cleanPhone === '8073266325' ||
+        cleanPhone === '919845012345' ||
+        cleanPhone === '918073266325'
+      ) {
+        const res = await loginOwner(trimmedInput === '1984' || userPassword === '1984' ? '1984' : trimmedInput);
         if (res.success && res.session) {
-          setSuccessMessage('Owner credentials authorized. Opening Owner Master Console...');
+          setSuccessMessage('Owner credentials authorized! Opening Owner Master Console...');
           setTimeout(() => {
             onAuthSuccess(res.session!, 'owner');
             onClose();
-          }, 500);
+          }, 400);
           return;
         }
       }
-      if (trimmedInput === '2409' || trimmedInput.toLowerCase() === 'dev@nsprops.internal' || trimmedInput === '9886024090') {
+
+      if (trimmedInput === '2409' || trimmedInput.toLowerCase() === 'dev@nsprops.internal' || userPassword === '2409' || cleanPhone === '9886024090') {
         const res = await loginDeveloper('2409');
         if (res.success && res.session) {
-          setSuccessMessage('Developer credentials authorized. Opening Developer Dashboard...');
+          setSuccessMessage('Developer credentials authorized! Opening Developer Dashboard...');
           setTimeout(() => {
             onAuthSuccess(res.session!, 'developer');
             onClose();
-          }, 500);
+          }, 400);
           return;
         }
       }
-      if (trimmedInput === '5566' || trimmedInput.toLowerCase() === 'vikram.staff@nsprops.internal' || trimmedInput === '9876543210') {
+
+      if (trimmedInput === '5566' || trimmedInput.toLowerCase() === 'vikram.staff@nsprops.internal' || userPassword === '5566' || cleanPhone === '9876543210') {
         const res = await loginStaff('5566', usersList);
         if (res.success && res.session) {
-          setSuccessMessage('Staff credentials authorized. Opening Staff Dashboard...');
+          setSuccessMessage('Staff credentials authorized! Opening Staff Dashboard...');
           setTimeout(() => {
             onAuthSuccess(res.session!, 'staff');
             onClose();
-          }, 500);
+          }, 400);
+          return;
+        }
+      }
+
+      // 2. PUBLIC USER LOGIN:
+      if (authMethod === 'otp') {
+        if (!isOtpSent) {
+          // Auto generate and fill OTP immediately if not already sent
+          const code = Math.floor(100000 + Math.random() * 900000).toString();
+          setGeneratedOtp(code);
+          setOtpInput(code);
+          setIsOtpSent(true);
+          setResendTimer(30);
+          setSuccessMessage(`OTP code generated: ${code}. Click "Verify OTP & Continue" to proceed.`);
+          setIsLoading(false);
+          return;
+        }
+
+        if (otpInput.trim() !== generatedOtp) {
+          setErrorMessage(`Invalid OTP entered. Please enter ${generatedOtp} or click "Auto-fill Code".`);
+          setIsLoading(false);
           return;
         }
       }
@@ -220,7 +256,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         setTimeout(() => {
           onAuthSuccess(res.session!);
           onClose();
-        }, 600);
+        }, 500);
       } else {
         setErrorMessage(res.message);
       }

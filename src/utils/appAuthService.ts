@@ -23,6 +23,7 @@ const APP_SESSION_KEY = 'NS_ACTIVE_APP_SESSION';
 export const OWNER_CREDENTIALS = {
   PIN: '1984',
   EMAIL: 'nitheshluxe@gmail.com',
+  PHONE: '9845012345',
   NAME: 'Nithesh (App Owner)'
 };
 
@@ -72,7 +73,17 @@ export function clearActiveSession(): void {
 
 export async function loginOwner(credential: string): Promise<{ success: boolean; message: string; session?: AppUserSession }> {
   const trimmed = credential.trim();
-  if (trimmed === OWNER_CREDENTIALS.PIN || trimmed.toLowerCase() === OWNER_CREDENTIALS.EMAIL || trimmed === 'admin123') {
+  const cleanPhone = trimmed.replace(/\D/g, '');
+  if (
+    trimmed === OWNER_CREDENTIALS.PIN || 
+    trimmed.toLowerCase() === OWNER_CREDENTIALS.EMAIL.toLowerCase() || 
+    trimmed.toLowerCase() === 'nitheshluxe@gmail.com' ||
+    trimmed === 'admin123' ||
+    cleanPhone === '9845012345' ||
+    cleanPhone === '8073266325' ||
+    cleanPhone === '919845012345' ||
+    cleanPhone === '918073266325'
+  ) {
     const session: AppUserSession = {
       id: 'user-owner',
       name: OWNER_CREDENTIALS.NAME,

@@ -534,7 +534,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="flex items-center gap-1 sm:gap-1.5">
                   <button
                     onClick={() => onOpenAuthModal('public')}
-                    className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
+                    className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] hover:bg-black text-[#fdfcf9] border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs tracking-wider"
                     title="Sign In or Register"
                   >
                     <User className="w-3.5 h-3.5 text-[#c4a47c]" />
@@ -548,7 +548,7 @@ export const Header: React.FC<HeaderProps> = ({
                     aria-expanded={userMenuOpen}
                   >
                     <Menu className="w-3.5 h-3.5 text-[#1a1a1a]" />
-                    <span className="font-bold text-xs">Menu</span>
+                    <span className="font-bold text-xs hidden xs:inline">Menu</span>
                     <ChevronDown className={`w-3 h-3 text-gray-600 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
@@ -560,7 +560,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* =================================================================== */}
             {userMenuOpen && (
               <div 
-                className="absolute right-0 top-full mt-2 w-84 sm:w-96 max-w-[94vw] bg-[#fdfcf9] border-2 border-[#1a1a1a] shadow-2xl z-50 font-mono-luxury text-xs max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-gray-200"
+                className="absolute right-0 top-full mt-2 w-84 sm:w-96 max-w-[calc(100vw-20px)] bg-[#fdfcf9] border-2 border-[#1a1a1a] shadow-2xl z-50 font-mono-luxury text-xs max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-gray-200"
               >
                 {/* 1. USER IDENTITY / WELCOME HEADER */}
                 <div className="p-3.5 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] text-[#fdfcf9]">
