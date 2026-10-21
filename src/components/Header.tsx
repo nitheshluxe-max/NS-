@@ -270,15 +270,15 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Main navigation header */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 w-full">
         {/* Brand & City Selector */}
-        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
           <div 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0 group"
           >
             {/* 3D Architectural 4 App Profile Logo */}
-            <AppProfileLogo size="md" showGlow={true} className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:scale-105" />
+            <AppProfileLogo size="md" showGlow={true} className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:scale-105 shrink-0" />
 
-            <div>
+            <div className="shrink-0">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <span className="font-serif-luxury text-lg sm:text-2xl font-bold tracking-tight text-[#1a1a1a] whitespace-nowrap">
                   NS Properties
@@ -297,7 +297,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative shrink-0">
             <button
               onClick={() => setCityDropdownOpen(!cityDropdownOpen)}
-              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-mono-luxury text-[#1a1a1a] bg-[#fdfcf9] hover:bg-white border border-[#1a1a1a] cursor-pointer transition-colors"
+              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-mono-luxury text-[#1a1a1a] bg-[#fdfcf9] hover:bg-white border border-[#1a1a1a] cursor-pointer transition-colors shrink-0"
             >
               <MapPin className="w-3.5 h-3.5 text-[#c4a47c] shrink-0" />
               <span className="font-bold truncate max-w-[80px] sm:max-w-none">{selectedCity}</span>
@@ -335,9 +335,9 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Desktop Category Navigation Tabs */}
+          {/* Desktop Category Navigation Tabs (Only on 2XL wide screens to prevent colliding) */}
           {onSelectCategory && (
-            <nav className="hidden xl:flex items-center gap-1 border-l border-[#1a1a1a]/20 pl-4 font-mono-luxury text-xs">
+            <nav className="hidden 2xl:flex items-center gap-3 border-l border-[#1a1a1a]/20 pl-4 font-mono-luxury text-xs shrink-0">
               <button
                 onClick={() => onSelectCategory('apartments')}
                 className={`px-2.5 py-1 uppercase font-bold transition-colors cursor-pointer ${
@@ -382,94 +382,32 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
 
-        {/* Right Action Buttons */}
-        <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 shrink-0">
-          {/* Special Offers & Deals */}
-          {onOpenOffers && (
-            <button
-              onClick={onOpenOffers}
-              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#c4a47c]/15 border border-[#c4a47c]/70 hover:border-[#c4a47c] transition-all cursor-pointer font-bold"
-              title="Exclusive Property Offers & Deals"
-            >
-              <Tag className="w-3.5 h-3.5 text-[#c4a47c]" />
-              <span className="hidden md:inline">Offers</span>
-              <span className="bg-[#c4a47c] text-black text-[9px] px-1 py-0.2 font-black">DEALS</span>
-            </button>
-          )}
-
-          {/* Subscription Plans */}
-          {onOpenPlansModal && (
-            <button
-              onClick={onOpenPlansModal}
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-gray-100 border border-[#1a1a1a]/30 transition-all cursor-pointer font-bold"
-              title="Agent & Builder Plans: Free Site Visits & Deals"
-            >
-              <Crown className="w-3.5 h-3.5 text-[#c4a47c]" />
-              <span>Free Visit Plans</span>
-            </button>
-          )}
-
-          {/* Google Play Store Console Trigger */}
-          {onOpenPlayStorePublish && (
-            <button
-              onClick={onOpenPlayStorePublish}
-              className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-emerald-50 border border-emerald-700/60 hover:border-emerald-700 transition-all cursor-pointer font-bold"
-              title="Google Play Store Publishing Console & .AAB Package Builder"
-            >
-              <Laptop className="w-3.5 h-3.5 text-emerald-700" />
-              <span>Google Play</span>
-            </button>
-          )}
-
+        {/* Right Action Buttons: Clean, Luxury, Never Colliding */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Post Free Property Button */}
           <button
             onClick={onOpenPostProperty}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a] transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#1a1a1a] text-[#fdfcf9] hover:bg-black border border-[#1a1a1a] transition-all cursor-pointer font-bold shadow-xs whitespace-nowrap"
             title="Post Free Property Ad"
           >
             <PlusCircle className="w-3.5 h-3.5 text-[#c4a47c]" />
-            <span className="hidden md:inline">Post Ad</span>
-            <span className="md:hidden">Post</span>
-          </button>
-
-          {/* Compare Button */}
-          <button
-            onClick={onOpenCompare}
-            className="hidden sm:flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-transparent hover:border-[#1a1a1a]/20 transition-all cursor-pointer"
-            title="Compare Properties"
-          >
-            <Scale className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Compare</span>
-            {compareCount > 0 && (
-              <span className="bg-[#1a1a1a] text-[#fdfcf9] text-[9px] font-bold px-1.5 py-0.2">
-                {compareCount}
-              </span>
-            )}
+            <span className="hidden sm:inline">Post Ad</span>
+            <span className="sm:hidden">Post</span>
           </button>
 
           {/* Saved Properties (Shortlist) */}
           <button
             onClick={onOpenSaved}
-            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-transparent hover:border-[#1a1a1a]/20 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] bg-white hover:bg-gray-100 border border-[#1a1a1a] transition-all cursor-pointer font-bold whitespace-nowrap"
             title="Saved Properties"
           >
-            <Heart className={`w-3.5 h-3.5 ${savedCount > 0 ? 'text-red-600 fill-red-600' : ''}`} />
+            <Heart className={`w-3.5 h-3.5 ${savedCount > 0 ? 'text-red-600 fill-red-600' : 'text-[#1a1a1a]'}`} />
             <span className="hidden md:inline">Saved</span>
             {savedCount > 0 && (
-              <span className="bg-[#1a1a1a] text-[#fdfcf9] text-[9px] font-bold px-1.5 py-0.2">
+              <span className="bg-[#c4a47c] text-black text-[9px] font-black px-1.5 py-0.2">
                 {savedCount}
               </span>
             )}
-          </button>
-
-          {/* Contact NS Properties */}
-          <button
-            onClick={onOpenContactModal}
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase text-[#1a1a1a] hover:bg-[#1a1a1a]/5 border border-[#1a1a1a]/30 hover:border-[#1a1a1a] transition-all cursor-pointer"
-            title="Contact NS Properties"
-          >
-            <Phone className="w-3.5 h-3.5 text-[#c4a47c]" />
-            <span>Contact NS</span>
           </button>
 
           {/* ========================================================================= */}
@@ -1115,15 +1053,6 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Download App CTA */}
-          <button
-            onClick={onOpenDownloadModal}
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-luxury uppercase bg-[#c4a47c] text-black hover:bg-[#b09066] border border-[#1a1a1a] font-black transition-colors cursor-pointer"
-            title="Install NS Properties App on Mobile/Desktop"
-          >
-            <Download className="w-3.5 h-3.5 text-black" />
-            <span className="hidden xl:inline">Install App</span>
-          </button>
         </div>
       </div>
     </header>
