@@ -100,13 +100,13 @@ export const CategoryQuickNav: React.FC<CategoryNavProps> = ({
                     <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className={`font-serif-luxury font-bold text-xs sm:text-base leading-tight truncate ${
-                      isSelected ? 'text-white' : 'text-[#1a1a1a]'
+                    <h3 className={`font-semibold text-xs sm:text-base leading-tight truncate ${
+                      isSelected ? 'text-white' : 'text-slate-900'
                     }`}>
                       {cat.label}
                     </h3>
-                    <p className={`font-mono-luxury text-[9px] sm:text-[11px] mt-0.5 truncate hidden xs:block ${
-                      isSelected ? 'text-white/70' : 'text-[#1a1a1a]/60'
+                    <p className={`text-[10px] sm:text-[11px] mt-0.5 truncate hidden xs:block font-normal ${
+                      isSelected ? 'text-white/70' : 'text-slate-500'
                     }`}>
                       {cat.sublabel}
                     </p>
@@ -114,10 +114,10 @@ export const CategoryQuickNav: React.FC<CategoryNavProps> = ({
                 </div>
 
                 <div className="text-right pl-1 sm:pl-2 shrink-0">
-                  <span className={`inline-block font-mono-luxury text-[9px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 ${
+                  <span className={`inline-block text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-xs ${
                     isSelected
                       ? 'bg-[#c4a47c] text-black'
-                      : 'bg-[#1a1a1a]/5 text-[#1a1a1a]'
+                      : 'bg-slate-100 text-slate-800'
                   }`}>
                     {cat.count}
                   </span>
